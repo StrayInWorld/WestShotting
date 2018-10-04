@@ -6,14 +6,16 @@ cc.Class({
 
     // LIFE-CYCLE CALLBACKS:
 
-    // onLoad () {},
+    onLoad() {
+    },
 
-    start () {
+    start() {
 
     },
-    playMusic(){
-
+    startBtnCB() {
+        cc.director.loadScene("game");
     }
+
 
     // update (dt) {},
 });

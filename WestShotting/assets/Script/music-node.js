@@ -22,15 +22,11 @@ cc.Class({
         this.audioSource.pause();
     },
 
-    // LIFE-CYCLE CALLBACKS:
+    // onLoad () {
+    // },
 
-    onLoad () {
-        console.log(this.audioSource);
-    },
-
-    start () {
-
-    },
+    // start () {
+    // },
 
     // update (dt) {},
 });
