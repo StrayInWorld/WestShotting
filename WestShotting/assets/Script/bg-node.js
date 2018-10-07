@@ -42,8 +42,10 @@ cc.Class({
         let resetPos = cc.v2(canvasNode.width,frontGround.y);
         let firstMoveX = frontGround.width - canvasNode.width;
         let secondMoveX = canvasNode.width;
-        let firstActionTime = 100;
-        let secondActionTime = 30;
+        let firstActionTime = 7;
+        let secondActionTime = 4;
+        let thirdActionTime = 3;
+
 
         frontGround.runAction(cc.repeatForever(
             cc.sequence(
@@ -52,20 +54,22 @@ cc.Class({
                     cc.log("1");
                     secondFrontGround.runAction(
                         cc.sequence(
-                            cc.moveBy(secondActionTime, cc.v2(-secondMoveX, 0)),
-                            cc.callFunc(function () {
-                                cc.log("2");
-                            }),
-                            cc.place(resetPos)
+                            cc.moveBy(secondActionTime-0.3, cc.v2(-secondMoveX, 0)),
+                            cc.moveBy(firstActionTime, cc.v2(-firstMoveX, 0)),
+                            cc.moveBy(thirdActionTime, cc.v2(-secondMoveX, 0)),
+                            cc.place(resetPos),
+                            cc.callFunc(function(){
+                                cc.log("2")
+                            })
                         )
                     )
                 }),
                 cc.moveBy(secondActionTime, cc.v2(-secondMoveX, 0)),
                 cc.place(resetPos),
-                // cc.delayTime(secondActionTime)
+                cc.delayTime(firstActionTime)
             )
         ));
-
+        
         //山动画
         let mountain = cc.find("mountainNode/mountain1", this.node);
         let secondMountain = cc.find("mountainNode/mountain2", this.node);
