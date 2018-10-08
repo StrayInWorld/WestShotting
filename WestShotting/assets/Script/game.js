@@ -2,7 +2,7 @@ cc.Class({
     extends: cc.Component,
 
     properties: {
-
+       doubleChain:cc.Node
     },
 
     // LIFE-CYCLE CALLBACKS:
@@ -19,6 +19,10 @@ cc.Class({
         // //leftBottom
         // let tri4 = cc.find("Canvas/Triangle4");
         // tri4.runAction(cc.sequence(cc.flipX(true),cc.flipY(true)));
+
+
+
+
 
     },
 
