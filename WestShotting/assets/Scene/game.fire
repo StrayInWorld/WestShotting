@@ -41,8 +41,8 @@
     },
     "_scale": {
       "__type__": "cc.Vec3",
-      "x": 0.2150136774449562,
-      "y": 0.2150136774449562,
+      "x": 0.215013677444956,
+      "y": 0.215013677444956,
       "z": 1
     },
     "_quat": {
@@ -1054,7 +1054,7 @@
     "node": {
       "__id__": 20
     },
-    "_enabled": true,
+    "_enabled": false,
     "alignMode": 0,
     "_target": {
       "__id__": 2
@@ -1450,7 +1450,7 @@
     "node": {
       "__id__": 26
     },
-    "_enabled": true,
+    "_enabled": false,
     "alignMode": 0,
     "_target": {
       "__id__": 2

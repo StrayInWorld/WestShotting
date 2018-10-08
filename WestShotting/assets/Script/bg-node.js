@@ -70,7 +70,9 @@ cc.Class({
                 cc.delayTime(thirdActionTime)
             )
         ));
-        
+
+        //背景动画
+
         //山动画
         let mountain = cc.find("mountainNode/mountain1", this.node);
         let secondMountain = cc.find("mountainNode/mountain2", this.node);
