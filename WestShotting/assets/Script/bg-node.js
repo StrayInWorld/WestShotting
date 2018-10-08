@@ -27,7 +27,7 @@ cc.Class({
         let cloud2 = cc.find("cloudNode/cloud2", this.node);
         let cloudOriginNodePos = groundNodeCloud.position;
         let cloudMoveX = cloud2.position.x;
-        let cloudMoveTime = 100;
+        let cloudMoveTime = 120;
         groundNodeCloud.runAction(cc.repeatForever(
             cc.sequence(
                 cc.moveBy(cloudMoveTime, cc.v2(-cloudMoveX, 0)),
@@ -35,38 +35,39 @@ cc.Class({
             )
         ));
 
-        //前景动画
+        //前景动画（包括太阳）
         let frontGroundNode = cc.find("frontGroundNode", this.node);
         let frontGround = cc.find("frontGroundNode/frontGround1", this.node);
         let secondFrontGround = cc.find("frontGroundNode/frontGround2", this.node);
         let resetPos = cc.v2(canvasNode.width,frontGround.y);
-        let firstMoveX = frontGround.width - canvasNode.width;
-        let secondMoveX = canvasNode.width;
-        let firstActionTime = 7;
-        let secondActionTime = 4;
-        let thirdActionTime = 3;
-
+        let firstMoveX = frontGround.width - canvasNode.width;  //长度-屏幕宽度
+        let secondMoveX = canvasNode.width; //屏幕宽度
+        let firstActionTime = 300;
+        let secondActionTime = 280;
+        let thirdActionTime = 250;
 
         frontGround.runAction(cc.repeatForever(
             cc.sequence(
                 cc.moveBy(firstActionTime, cc.v2(-firstMoveX, 0)),
-                cc.callFunc(function () {
-                    cc.log("1");
-                    secondFrontGround.runAction(
-                        cc.sequence(
-                            cc.moveBy(secondActionTime-0.3, cc.v2(-secondMoveX, 0)),
-                            cc.moveBy(firstActionTime, cc.v2(-firstMoveX, 0)),
-                            cc.moveBy(thirdActionTime, cc.v2(-secondMoveX, 0)),
-                            cc.place(resetPos),
-                            cc.callFunc(function(){
-                                cc.log("2")
-                            })
+                cc.spawn(
+                    cc.callFunc(function () {
+                        cc.log("1");
+                        secondFrontGround.runAction(
+                            cc.sequence(
+                                cc.moveBy(secondActionTime, cc.v2(-secondMoveX, 0)),
+                                cc.moveBy(firstActionTime, cc.v2(-firstMoveX, 0)),
+                                cc.moveBy(thirdActionTime, cc.v2(-secondMoveX, 0)),
+                                cc.place(resetPos),
+                                cc.callFunc(function(){
+                                    cc.log("2")
+                                })
+                            )
                         )
-                    )
-                }),
-                cc.moveBy(secondActionTime, cc.v2(-secondMoveX, 0)),
+                    }),
+                    cc.moveBy(secondActionTime, cc.v2(-secondMoveX, 0)),    
+                ),
                 cc.place(resetPos),
-                cc.delayTime(firstActionTime)
+                cc.delayTime(thirdActionTime)
             )
         ));
         
@@ -74,7 +75,7 @@ cc.Class({
         let mountain = cc.find("mountainNode/mountain1", this.node);
         let secondMountain = cc.find("mountainNode/mountain2", this.node);
         let mountaisMovsX = mountain.width;
-        let mountainActionTime = 100;
+        let mountainActionTime = 420;
         mountain.runAction(cc.repeatForever(
             cc.sequence(
                 cc.moveBy(mountainActionTime,cc.v2(-mountaisMovsX,0)),
