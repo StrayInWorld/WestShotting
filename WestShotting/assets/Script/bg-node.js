@@ -11,8 +11,8 @@ cc.Class({
         let canvasNode = cc.find("Canvas");
 
         //翻转第二张背景的山的图
-        let secondBgGround2 = cc.find("backGroundNode/backGround2", this.node);
-        secondBgGround2.runAction(cc.flipX(true));
+        let secondBgGround = cc.find("backGroundNode/backGround2", this.node);
+        secondBgGround.runAction(cc.flipX(true));
 
         //翻转第二张山的图
         let mountain2 = cc.find("mountainNode/mountain2", this.node);
@@ -39,12 +39,12 @@ cc.Class({
         let frontGroundNode = cc.find("frontGroundNode", this.node);
         let frontGround = cc.find("frontGroundNode/frontGround1", this.node);
         let secondFrontGround = cc.find("frontGroundNode/frontGround2", this.node);
-        let resetPos = cc.v2(canvasNode.width,frontGround.y);
+        let resetPos = cc.v2(canvasNode.width, frontGround.y);
         let firstMoveX = frontGround.width - canvasNode.width;  //长度-屏幕宽度
         let secondMoveX = canvasNode.width; //屏幕宽度
-        let firstActionTime = 300;
-        let secondActionTime = 280;
-        let thirdActionTime = 250;
+        let firstActionTime = 60*5;
+        let secondActionTime = 60*4;
+        let thirdActionTime = 60*4;
 
         frontGround.runAction(cc.repeatForever(
             cc.sequence(
@@ -58,32 +58,55 @@ cc.Class({
                                 cc.moveBy(firstActionTime, cc.v2(-firstMoveX, 0)),
                                 cc.moveBy(thirdActionTime, cc.v2(-secondMoveX, 0)),
                                 cc.place(resetPos),
-                                cc.callFunc(function(){
+                                cc.callFunc(function () {
                                     cc.log("2")
                                 })
                             )
                         )
                     }),
-                    cc.moveBy(secondActionTime, cc.v2(-secondMoveX, 0)),    
+                    cc.moveBy(secondActionTime, cc.v2(-secondMoveX, 0)),
                 ),
                 cc.place(resetPos),
                 cc.delayTime(thirdActionTime)
             )
         ));
 
-        //背景动画
-
         //山动画
         let mountain = cc.find("mountainNode/mountain1", this.node);
         let secondMountain = cc.find("mountainNode/mountain2", this.node);
         let mountaisMovsX = mountain.width;
-        let mountainActionTime = 420;
+        let mountainActionTime = 60*7;
         mountain.runAction(cc.repeatForever(
             cc.sequence(
-                cc.moveBy(mountainActionTime,cc.v2(-mountaisMovsX,0)),
+                cc.moveBy(mountainActionTime, cc.v2(-mountaisMovsX, 0)),
                 cc.callFunc(function () {
                     cc.log("1");
                     secondMountain.runAction(
+                        cc.sequence(
+                            cc.moveBy(mountainActionTime, cc.v2(-mountaisMovsX, 0)),
+                            cc.callFunc(function () {
+                                cc.log("2");
+                            }),
+                            cc.place(resetPos)
+                        )
+                    )
+                }),
+                cc.place(resetPos)
+            )
+        ));
+
+
+        //背景动画
+        let backGround = cc.find("backGroundNode/backGround1",this.node);
+        let backGroundActionTime = 60*9;
+        let backGroundFristTime = 60*7;
+        let backGroundSecondTime = 60*5;
+        backGround.runAction(cc.repeatForever(
+            cc.sequence(
+                cc.moveBy(backGroundActionTime, cc.v2(-firstMoveX, 0)),
+                cc.callFunc(function () {
+                    cc.log("1");
+                    secondBgGround.runAction(
                         cc.sequence(
                             cc.moveBy(mountainActionTime, cc.v2(-mountaisMovsX, 0)),
                             cc.callFunc(function () {
@@ -102,5 +125,5 @@ cc.Class({
 
     },
 
-    update (dt) {},
+    update(dt) { },
 });
