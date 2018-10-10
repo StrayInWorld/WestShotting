@@ -2,7 +2,7 @@ cc.Class({
     extends: cc.Component,
 
     properties: {
-
+        BasicPoint: cc.Prefab
     },
 
     // LIFE-CYCLE CALLBACKS:
@@ -13,12 +13,14 @@ cc.Class({
     onLoad() {
         let _self = this;
         let leftPos = -this.node.parent.width / 2;
-        this.arms = cc.find("arms", this.node);
         let parentNode = this.node.parent;
+        this.arms = cc.find("arms", this.node);
         this.blankNode = cc.find("Canvas/player/arms/blankNode");
-
-        //枪口节点
         this.armsOpen = cc.find("Canvas/player/arms/armsOpen");
+
+        this.basicPoint = cc.instantiate(this.BasicPoint);
+        this.basicPoint.parent = this.arms;
+        this.basicPoint.active = false;
 
         //是否开始创建瞄准线
         this.isCreateSignLine = false;
@@ -36,6 +38,10 @@ cc.Class({
 
             parentNode.on("touchmove", function (event) {
                 this.moveArms(event);
+            }, this);
+
+            parentNode.on("touchend", function (event) {
+                this.isCreateSignLine = false;
             }, this);
 
         }, this);
@@ -79,6 +85,9 @@ cc.Class({
 
     //点击屏幕时移动枪
     touchStartMove(event) {
+        this.isCreateSignLine = true;
+        this.basicPoint.active = true;
+
         let currentPos = cc.v2(event.getLocation());
         let currentNodePos = this.arms.convertToNodeSpace(currentPos);  //触摸点转换本地坐标
         let armsOpenPos1 = this.armsOpen.position;
@@ -92,12 +101,25 @@ cc.Class({
         let blankNodePos = this.arms.convertToWorldSpace(this.blankNode.position);
 
         this.getRaysEndPos(armsOpenPos, blankNodePos);
+
+        // cc.log("currentPos：",currentPos);
+        // cc.log("armsOpenPos",armsOpenPos);
+        // cc.log("blankNodePos",blankNodePos);
     },
 
     //创建瞄准线
     update(dt) {
         if (this.isCreateSignLine) {
             cc.log("create sign line");
+            //枪口位置
+            let armsOpenPos = this.arms.convertToWorldSpace(this.armsOpen.position);
+            //空白点的位置
+            let blankNodePos = this.arms.convertToWorldSpace(this.blankNode.position);
+
+            if (this.basicPoint.getNumberOfRunningActions() === 0) {
+                cc.log("123");
+                this.basicPoint.runAction(cc.sequence(cc.moveTo(0.3, this.blankNode.position), cc.place(this.armsOpen.position)));
+            }
         }
     },
 });
