@@ -17,11 +17,11 @@ cc.Class({
         this.trackSprites = [];      //装轨迹点
 
         //添加瞄准线对象池
-        // this.basicPointPool = new cc.NodePool();
-        // for (let i = 0; i < 5; i++) {
-        //     let basicPoint = cc.instantiate(this.BasicPoint);
-        //     this.basicPointPool.put(basicPoint);
-        // }
+        this.basicPointPool = new cc.NodePool();
+        for (let i = 0; i < 5; i++) {
+            let basicPoint = cc.instantiate(this.BasicPoint);
+            this.basicPointPool.put(basicPoint);
+        }
 
         //碰撞点位置
         this.colliderPoint = null;
@@ -47,12 +47,12 @@ cc.Class({
             }, this);
 
             parentNode.on("touchend", function (event) {
+                this.removeTrackSprites();
                 this.isCreateSignLine = false;
             }, this);
 
         }, this);
         this.arms.runAction(cc.sequence(armAction, touchAction));
-
     },
 
     start() {
@@ -67,7 +67,6 @@ cc.Class({
         } else {
             item = cc.instantiate(this.BasicPoint);
         }
-        item.parent = this.armsOpen;
         return item;
     },
     recoverToPool(basicPoint) {
@@ -120,33 +119,34 @@ cc.Class({
     },
 
     //创建瞄准线
-    // update(dt) {
-    //     if (this.isCreateSignLine) {
-    //         //枪口位置
-    //         let armsOpenPos = this.arms.convertToWorldSpace(this.armsOpen.position);
-    //         //空白点的位置
-    //         let blankNodePos = this.arms.convertToWorldSpace(this.blankNode.position);
-    //         this.getRaysEndPos(armsOpenPos, blankNodePos);
+    update(dt) {
+        if (this.isCreateSignLine) {
+            // //枪口位置
+            // let armsOpenPos = this.arms.convertToWorldSpace(this.armsOpen.position);
+            // //空白点的位置
+            // let blankNodePos = this.arms.convertToWorldSpace(this.blankNode.position);
+            // this.getRaysEndPos(armsOpenPos, blankNodePos);
 
-    //         if (!this.colliderPoint) {
-    //             this.colliderPoint = this.blankNode.position;
-    //         }
-    //         let startPos = this.armsOpen.position;
-    //         let endPos = this.colliderPoint;
-    //         this.colliderPoint = null;
+            // if (!this.colliderPoint) {
+            //     this.colliderPoint = this.blankNode.position;
+            // }
+            // let startPos = this.armsOpen.position;
+            // let endPos = this.colliderPoint;
+            // this.colliderPoint = null;
 
-    //         // let basicPoint = this.createFromPool();
-    //         // let endPosMag = endPos.mag();
-    //         // let basicMag = 208;
-    //         // let time = Math.floor(endPosMag / basicMag) * 0.2;
-    //         // basicPoint.runAction(cc.sequence(
-    //         //     cc.moveTo(time, endPos),
-    //         //     cc.callFunc(function () {
-    //         //         this.recoverToPool(basicPoint);
-    //         //     }, this)
-    //         // ));
-    //     }
-    // },
+            // let basicPoint = this.createFromPool();
+            // basicPoint.parent = this.pointLayout.node;
+            // let endPosMag = endPos.mag();
+            // let basicMag = 208;
+            // let time = Math.floor(endPosMag / basicMag) * 0.2;
+            // basicPoint.runAction(cc.sequence(
+            //     cc.moveTo(time, endPos),
+            //     cc.callFunc(function () {
+            //         this.recoverToPool(basicPoint);
+            //     }, this)
+            // ));
+        }
+    },
 
     //绘制轨迹路线
     drawTrack: function (startPos, endPos) {
@@ -157,13 +157,20 @@ cc.Class({
 
         //轨迹点数量
         let item = cc.instantiate(this.BasicPoint);
-        let trackNum = Math.ceil(distance / (item.width + this.pointLayout.spacingX));
-
+        let trackNum = Math.ceil(distance / (item.width + this.pointLayout.spacingX)) + 1;
         for (let i = 1; i < trackNum; i++) {
             //克隆轨迹点
+            // let trackSpriteTemplate = this.createFromPool();
             let trackSpriteTemplate = cc.instantiate(this.BasicPoint);
             this.pointLayout.node.addChild(trackSpriteTemplate);
             this.trackSprites.push(trackSpriteTemplate);
+
+            // trackSpriteTemplate.runAction(cc.sequence(
+            //     cc.moveBy(1,endPos),
+            //     cc.callFunc(function(){
+            //         cc.log("123");
+            //     })
+            // ));       ;     
         }
 
         //向量差计算,结束点-开始点，向量的指向是朝着结束点
@@ -171,8 +178,8 @@ cc.Class({
         //向量的角度计算，cc.pToAngle是获得弧度值，角度 = 弧度/PI*180
         var angle = radius / Math.PI * 180;
 
-        //rotation 是逆时针旋转的，在角度添加负号才正确
-        this.pointLayout.node.rotation = -angle;
+        //rotation 是逆时针旋转的，在角度添加负号才正确(添加下面会有误差)
+        // this.pointLayout.node.rotation = -angle;
     },
 
     //移除轨迹点

@@ -89,5 +89,37 @@ cc.Class({
                 trackSprite.removeFromParent();
             }
         }
-    }
+    },
+
+    drawLine: function (start, end) {
+        var com = this.node.getComponent(cc.Graphics);
+        var line = end.sub(start);          //获得从start到end的向量
+        var lineLength = line.mag();        //获得这个向量的长度
+        var length = 20;                    //设置虚线中每条线段的长度
+        var increment = line.normalize().mul(length)     //根据每条线段的长度获得一个增量向量
+
+        var drawingLine = true          //确定现在是画线还是留空的bool
+        var pos = start.clone()         //临时变量
+        com.strokeColor = cc.color(255, 255, 255)
+
+        for (; lineLength > length; lineLength -= length)          //只要线段长度还大于每条线段的长度
+        {
+            if (drawingLine) {               //画线
+                com.moveTo(pos.x, pos.y)
+                pos.addSelf(increment)
+                com.lineTo(pos.x, pos.y)
+                com.stroke()
+            }
+            else {
+                pos.addSelf(increment)       //留空
+            }
+
+            drawingLine = !drawingLine       //取反
+        }
+        if (drawingLine) {                   //最后一段
+            com.moveTo(pos.x, pos.y)
+            com.lineTo(end.x, end.y)
+            com.stroke()
+        }
+    },
 });

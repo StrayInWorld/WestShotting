@@ -12,12 +12,12 @@ cc.Class({
         physicsManager.enabled = true;
 
         //是否绘制边界
-        // physicsManager.debugDrawFlags =
-        //     // 0;
-        //     // cc.PhysicsManager.DrawBits.e_aabbBit |
-        //     cc.PhysicsManager.DrawBits.e_jointBit |
-        //     cc.PhysicsManager.DrawBits.e_shapeBit
-        //     ;
+        physicsManager.debugDrawFlags =
+            // 0;
+            // cc.PhysicsManager.DrawBits.e_aabbBit |
+            cc.PhysicsManager.DrawBits.e_jointBit |
+            cc.PhysicsManager.DrawBits.e_shapeBit
+            ;
 
         this.width = this.size.width || this.node.width;
         this.height = this.size.height || this.node.height;
