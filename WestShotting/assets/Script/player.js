@@ -18,9 +18,13 @@ cc.Class({
         this.blankNode = cc.find("Canvas/player/arms/blankNode");
         this.armsOpen = cc.find("Canvas/player/arms/armsOpen");
 
+        //瞄准线预制
         this.basicPoint = cc.instantiate(this.BasicPoint);
         this.basicPoint.parent = this.arms;
         this.basicPoint.active = false;
+
+        //碰撞点位置
+        this.colliderPoint = null;
 
         //是否开始创建瞄准线
         this.isCreateSignLine = false;
@@ -42,27 +46,12 @@ cc.Class({
 
             parentNode.on("touchend", function (event) {
                 this.isCreateSignLine = false;
+                this.basicPoint.runAction(cc.place(this.armsOpen.position));
+                this.basicPoint.active = false;
             }, this);
 
         }, this);
         this.arms.runAction(cc.sequence(armAction, touchAction));
-    },
-
-    //获取射线终点坐标
-    getRaysEndPos(startPos, endPos) {
-        //射线检测
-        var results = cc.director.getPhysicsManager().rayCast(startPos, endPos, cc.RayCastType.Any);
-        if (results.length > 0) {
-            cc.log("results:", results[0].point);
-        }
-        for (var i = 0; i < results.length; i++) {
-            var result = results[i];
-            var collider = result.collider;
-            var point = result.point;
-            var normal = result.normal;
-            var fraction = result.fraction;
-        }
-
     },
 
     //移动屏幕时移动枪
@@ -74,13 +63,6 @@ cc.Class({
         let moveNodeRad = startNodePos.signAngle(currentNodePos);
         let moveNodeRotation = moveNodeRad * 180 / Math.PI;
         this.arms.rotation += -moveNodeRotation;
-
-        //枪口位置
-        let armsOpenPos = this.arms.convertToWorldSpace(this.armsOpen.position);
-        //空白点的位置
-        let blankNodePos = this.arms.convertToWorldSpace(this.blankNode.position);
-
-        this.getRaysEndPos(armsOpenPos, blankNodePos);
     },
 
     //点击屏幕时移动枪
@@ -94,31 +76,36 @@ cc.Class({
         let moveRad = currentNodePos.signAngle(armsOpenPos1);
         let moveRotation = moveRad * 180 / Math.PI;
         this.arms.rotation += moveRotation;
+    },
 
-        //枪口位置
-        let armsOpenPos = this.arms.convertToWorldSpace(this.armsOpen.position);
-        //空白点的位置
-        let blankNodePos = this.arms.convertToWorldSpace(this.blankNode.position);
-
-        this.getRaysEndPos(armsOpenPos, blankNodePos);
-
-        // cc.log("currentPos：",currentPos);
-        // cc.log("armsOpenPos",armsOpenPos);
-        // cc.log("blankNodePos",blankNodePos);
+    //获取射线终点坐标
+    getRaysEndPos(startPos, endPos) {
+        //射线检测
+        var results = cc.director.getPhysicsManager().rayCast(startPos, endPos, cc.RayCastType.Closest);
+        if (results.length > 0) {
+            this.colliderPoint = this.arms.convertToNodeSpace(results[0].point);
+        }
     },
 
     //创建瞄准线
     update(dt) {
         if (this.isCreateSignLine) {
-            cc.log("create sign line");
             //枪口位置
             let armsOpenPos = this.arms.convertToWorldSpace(this.armsOpen.position);
             //空白点的位置
             let blankNodePos = this.arms.convertToWorldSpace(this.blankNode.position);
+            this.getRaysEndPos(armsOpenPos, blankNodePos);
 
+            if (!this.colliderPoint) {
+                this.colliderPoint = this.blankNode.position;
+            }
+            let startPos = this.armsOpen.position;
+            let endPos = this.colliderPoint;
             if (this.basicPoint.getNumberOfRunningActions() === 0) {
-                cc.log("123");
-                this.basicPoint.runAction(cc.sequence(cc.moveTo(0.3, this.blankNode.position), cc.place(this.armsOpen.position)));
+                let endPosMag = endPos.mag();
+                let basicMag = 208;
+                let time  = Math.floor(endPosMag/basicMag)*0.2;
+                this.basicPoint.runAction(cc.sequence(cc.moveTo(1, endPos), cc.place(startPos)));
             }
         }
     },
