@@ -43,12 +43,9 @@ cc.Class({
     },
 
     //获取射线终点坐标
-    getRaysEndPos(startPos, deltaPos) {
-        let blankPos = this.blankNode.position;
-        let newPos = blankPos.add(deltaPos);
-
+    getRaysEndPos(startPos, endPos) {
         //射线检测
-        var results = cc.director.getPhysicsManager().rayCast(startPos, newPos, cc.RayCastType.Any);
+        var results = cc.director.getPhysicsManager().rayCast(startPos, endPos, cc.RayCastType.Any);
         if (results.length > 0) {
             cc.log("results:", results[0].point);
         }
@@ -59,6 +56,7 @@ cc.Class({
             var normal = result.normal;
             var fraction = result.fraction;
         }
+
     },
 
     //移动屏幕时移动枪
@@ -71,23 +69,29 @@ cc.Class({
         let moveNodeRotation = moveNodeRad * 180 / Math.PI;
         this.arms.rotation += -moveNodeRotation;
 
-        //枪口坐标
-        let armsMuzzlePos= this.node.convertToWorldSpaceAR(this.arms.position).add(cc.v2(this.arms.width, 0));
-        this.getRaysEndPos(armsMuzzlePos, event.getDelta());
+        //枪口位置
+        let armsOpenPos = this.arms.convertToWorldSpace(this.armsOpen.position);
+        //空白点的位置
+        let blankNodePos = this.arms.convertToWorldSpace(this.blankNode.position);
+
+        this.getRaysEndPos(armsOpenPos, blankNodePos);
     },
 
     //点击屏幕时移动枪
     touchStartMove(event) {
         let currentPos = cc.v2(event.getLocation());
-        let currentNodePos = this.arms.convertToNodeSpace(currentPos);
-        let armsPos = this.arms.position;
-        let moveRad = currentNodePos.signAngle(armsPos);
+        let currentNodePos = this.arms.convertToNodeSpace(currentPos);  //触摸点转换本地坐标
+        let armsOpenPos1 = this.armsOpen.position;
+        let moveRad = currentNodePos.signAngle(armsOpenPos1);
         let moveRotation = moveRad * 180 / Math.PI;
         this.arms.rotation += moveRotation;
 
-        //枪口坐标
-        let armsMuzzlePos= this.node.convertToWorldSpaceAR(this.arms.position).add(cc.v2(this.arms.width, 0));
-        this.getRaysEndPos(armsMuzzlePos, event.getDelta());
+        //枪口位置
+        let armsOpenPos = this.arms.convertToWorldSpace(this.armsOpen.position);
+        //空白点的位置
+        let blankNodePos = this.arms.convertToWorldSpace(this.blankNode.position);
+
+        this.getRaysEndPos(armsOpenPos, blankNodePos);
     },
 
     //创建瞄准线
