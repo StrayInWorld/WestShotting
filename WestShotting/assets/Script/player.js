@@ -4,7 +4,7 @@ cc.Class({
     properties: {
         BasicPoint: cc.Prefab,
         pointLayout: cc.Layout,
-        Bullet:cc.Prefab
+        Bullet: cc.Prefab
     },
 
     // LIFE-CYCLE CALLBACKS:
@@ -16,15 +16,19 @@ cc.Class({
         this.blankNode = cc.find("Canvas/player/arms/blankNode");
         this.armsOpen = cc.find("Canvas/player/arms/armsOpen");
         this.trackSprites = [];      //装轨迹点
-        this.bullet = cc.instantiate(this.Bullet);
-        this.bullet.setPosition(cc.v2(100,0));
-        this.bullet.parent = this.armsOpen;
 
         //添加瞄准线对象池
         this.basicPointPool = new cc.NodePool();
         for (let i = 0; i < 5; i++) {
             let basicPoint = cc.instantiate(this.BasicPoint);
             this.basicPointPool.put(basicPoint);
+        }
+
+        //子弹对象池
+        this.bulletPool = new cc.NodePool("Bullet");
+        for (let i = 0; i < 3; i++) {
+            let bullet = cc.instantiate(this.Bullet);
+            this.bulletPool.put(bullet);
         }
 
         //碰撞点位置
@@ -53,6 +57,11 @@ cc.Class({
             parentNode.on("touchend", function (event) {
                 this.removeTrackSprites();
                 this.isCreateSignLine = false;
+
+                let bullet = this.createBulletFromPool();
+                bullet.setPosition(cc.v2(0, 0));
+                bullet.parent = this.armsOpen;
+                bullet.runAction(cc.moveTo(1, this.colliderPoint));
             }, this);
 
         }, this);
@@ -63,7 +72,21 @@ cc.Class({
 
     },
 
-    //对象池
+    //子弹对象池
+    createBulletFromPool() {
+        let item = null;
+        if (this.bulletPool.size() > 0) {
+            item = this.bulletPool.get(this.bulletPool);
+        } else {
+            item = cc.instantiate(this.Bullet);
+        }
+        return item;
+    },
+    recoverBulletToPool(item) {
+        this.bulletPool.put(item);
+    },
+
+    //瞄准线对象池
     createFromPool() {
         let item = null;
         if (this.basicPointPool.size() > 0) {
@@ -91,9 +114,6 @@ cc.Class({
         //空白点的位置
         let blankNodePos = this.arms.convertToWorldSpace(this.blankNode.position);
         this.getRaysEndPos(armsOpenPos, blankNodePos);
-
-        this.bullet.rotation =0;
-        this.bullet.rotation +=1;
     },
 
     //点击屏幕时移动枪
@@ -109,12 +129,6 @@ cc.Class({
         //空白点的位置
         let blankNodePos = this.arms.convertToWorldSpace(this.blankNode.position);
         this.getRaysEndPos(armsOpenPos, blankNodePos);
-
-        this.bullet.rotation =0;
-        this.bullet.rotation +=1;
-    },
-    lateUpdate(){
-        // this.bullet.rotation = this.arms.rotation;
     },
 
     //获取射线终点坐标
@@ -131,11 +145,6 @@ cc.Class({
         this.drawTrack(this.armsOpen.position, this.colliderPoint);
     },
 
-    //创建瞄准线
-    update(dt) {
-
-    },
-
     //绘制轨迹路线
     drawTrack: function (startPos, endPos) {
         //装载虚线节点
@@ -147,7 +156,6 @@ cc.Class({
         let item = cc.instantiate(this.BasicPoint);
         let trackNum = Math.ceil(distance / (item.width + this.pointLayout.spacingX)) + 1;
         for (let i = 1; i < trackNum; i++) {
-            //克隆轨迹点
             let trackSpriteTemplate = cc.instantiate(this.BasicPoint);
             this.pointLayout.node.addChild(trackSpriteTemplate);
             this.trackSprites.push(trackSpriteTemplate);

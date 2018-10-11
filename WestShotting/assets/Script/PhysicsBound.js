@@ -23,6 +23,7 @@ cc.Class({
         this.height = this.size.height || this.node.height;
 
         let node = new cc.Node();
+        node.group = "wall";
         let body = node.addComponent(cc.RigidBody);
         body.type = cc.RigidBodyType.Static;
 

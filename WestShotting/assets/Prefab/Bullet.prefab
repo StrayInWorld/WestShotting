@@ -27,10 +27,13 @@
       },
       {
         "__id__": 4
+      },
+      {
+        "__id__": 5
       }
     ],
     "_prefab": {
-      "__id__": 5
+      "__id__": 6
     },
     "_opacity": 255,
     "_color": {
@@ -42,8 +45,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 55,
-      "height": 16
+      "width": 24.4,
+      "height": 7.1
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -52,8 +55,8 @@
     },
     "_position": {
       "__type__": "cc.Vec3",
-      "x": 171,
-      "y": -62.7,
+      "x": 155.7,
+      "y": -67.1,
       "z": 0
     },
     "_scale": {
@@ -74,7 +77,7 @@
     "_skewX": 0,
     "_skewY": 0,
     "_zIndex": 0,
-    "groupIndex": 0,
+    "groupIndex": 1,
     "_id": ""
   },
   {
@@ -91,7 +94,7 @@
       "__uuid__": "cf6e500f-3aac-47c2-ab9b-ac31186b2c74"
     },
     "_type": 0,
-    "_sizeMode": 1,
+    "_sizeMode": 0,
     "_fillType": 0,
     "_fillCenter": {
       "__type__": "cc.Vec2",
@@ -113,7 +116,7 @@
       "__id__": 1
     },
     "_enabled": true,
-    "_type": 0,
+    "_type": 2,
     "_allowSleep": true,
     "_gravityScale": 1,
     "_linearDamping": 0,
@@ -141,7 +144,7 @@
     "_density": 1,
     "_sensor": false,
     "_friction": 0.2,
-    "_restitution": 0,
+    "_restitution": 1,
     "body": null,
     "_offset": {
       "__type__": "cc.Vec2",
@@ -151,40 +154,51 @@
     "points": [
       {
         "__type__": "cc.Vec2",
-        "x": -27.6,
-        "y": -8.2
+        "x": -12.38,
+        "y": -3.38
       },
       {
         "__type__": "cc.Vec2",
-        "x": 8.1,
-        "y": -7.9
+        "x": 3.21,
+        "y": -3.08
       },
       {
         "__type__": "cc.Vec2",
-        "x": 19.4,
-        "y": -5.1
+        "x": 7.67,
+        "y": -1.87
       },
       {
         "__type__": "cc.Vec2",
-        "x": 26.4,
-        "y": 0.4
+        "x": 11.16,
+        "y": 0.18
       },
       {
         "__type__": "cc.Vec2",
-        "x": 18.5,
-        "y": 5.2
+        "x": 7.4,
+        "y": 2.8
       },
       {
         "__type__": "cc.Vec2",
-        "x": 5.4,
-        "y": 7.4
+        "x": 2.96,
+        "y": 3.35
       },
       {
         "__type__": "cc.Vec2",
-        "x": -27.6,
-        "y": 8
+        "x": -12.45,
+        "y": 3.6
       }
     ],
+    "_id": ""
+  },
+  {
+    "__type__": "06225jJoxtOHpnJFA8hCFpw",
+    "_name": "",
+    "_objFlags": 0,
+    "node": {
+      "__id__": 1
+    },
+    "_enabled": true,
+    "poolManager": null,
     "_id": ""
   },
   {
