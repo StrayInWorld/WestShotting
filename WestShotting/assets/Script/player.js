@@ -91,6 +91,9 @@ cc.Class({
         //空白点的位置
         let blankNodePos = this.arms.convertToWorldSpace(this.blankNode.position);
         this.getRaysEndPos(armsOpenPos, blankNodePos);
+
+        this.bullet.rotation =0;
+        this.bullet.rotation +=1;
     },
 
     //点击屏幕时移动枪
@@ -106,6 +109,12 @@ cc.Class({
         //空白点的位置
         let blankNodePos = this.arms.convertToWorldSpace(this.blankNode.position);
         this.getRaysEndPos(armsOpenPos, blankNodePos);
+
+        this.bullet.rotation =0;
+        this.bullet.rotation +=1;
+    },
+    lateUpdate(){
+        // this.bullet.rotation = this.arms.rotation;
     },
 
     //获取射线终点坐标
@@ -124,7 +133,7 @@ cc.Class({
 
     //创建瞄准线
     update(dt) {
-        this.bullet.rotation = this.arms.rotation;
+
     },
 
     //绘制轨迹路线
