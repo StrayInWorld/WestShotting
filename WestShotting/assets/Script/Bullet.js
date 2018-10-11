@@ -11,13 +11,19 @@ cc.Class({
 
     onLoad() {
         this.colliderNum = 5;
+        this.rigidBody = this.node.getComponent(cc.RigidBody);
     },
 
     start() {
         // this.poolManager = null;
     },
     onBeginContact: function (contact, selfCollider, otherCollider) {
+        // let newLinearVelocity = this.rigidBody.linearVelocity;
+        // this.rigidBody.linearVelocity = cc.v2(-newLinearVelocity.x,-newLinearVelocity.y);
+
+        // cc.log(this.rigidBody.linearVelocity);
         this.colliderNum -= 1;
+        // cc.log(this.colliderNum);
         if (this.colliderNum < 0) {
             return;
         }
@@ -43,18 +49,15 @@ cc.Class({
 
     },
     reuse(poolManager) {
+        this.node.rotation = 0;
         this.poolManager = poolManager;
-        cc.log("reuse", this.poolManager);
     },
     recoverItemToPool(){
-        cc.log("unuse:", this.poolManager.size());
         if (this.poolManager) {
             this.poolManager.put(this.node);
-            cc.log("unuse:", this.poolManager.size());
         }
     },
     unuse() {
-        cc.log("unuse");
     },
 
 
