@@ -17,7 +17,7 @@
     "_parent": null,
     "_children": [],
     "_active": true,
-    "_level": 2,
+    "_level": 1,
     "_components": [
       {
         "__id__": 2
@@ -150,8 +150,8 @@
     },
     "_size": {
       "__type__": "cc.Size",
-      "width": 49,
-      "height": 48
+      "width": 47.5,
+      "height": 46.4
     },
     "_id": ""
   },
@@ -161,7 +161,7 @@
       "__id__": 1
     },
     "asset": {
-      "__id__": 0
+      "__uuid__": "08617c0b-2e74-4492-8882-0d014e8ffe9d"
     },
     "fileId": "e2j2kp4/pJuqgNOq95wqfP",
     "sync": false
