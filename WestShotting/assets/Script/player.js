@@ -135,15 +135,13 @@ cc.Class({
     touchStartMove(event) {
         this.isCreateSignLine = true;
         let currentNodePos = this.arms.convertToNodeSpace(event.getLocation());  //触摸点转换本地坐标
-        let moveRad = currentNodePos.signAngle(this.armsOpen.position);
+        let moveRad = currentNodePos.signAngle(this.armsOpen.position);          //枪口与当前触摸点夹角弧度
         let moveRotation = moveRad * 180 / Math.PI;
         this.arms.rotation += moveRotation;
 
-        //枪口位置
-        let armsOpenPos = this.arms.convertToWorldSpace(this.armsOpen.position);
-        //空白点的位置
-        let blankNodePos = this.arms.convertToWorldSpace(this.blankNode.position);
-        this.getRaysEndPos(armsOpenPos, blankNodePos);
+        let armsOpenPos = this.arms.convertToWorldSpace(this.armsOpen.position);  //枪口位置
+        let blankNodePos = this.arms.convertToWorldSpace(this.blankNode.position);//空白点的位置
+        this.getRaysEndPos(armsOpenPos, blankNodePos);                            //两点之间的接触点
         cc.log("触摸：", event.getLocation());
     },
 
@@ -151,6 +149,7 @@ cc.Class({
     getRaysEndPos(startPos, endPos) {
         //射线检测
         var results = cc.director.getPhysicsManager().rayCast(startPos, endPos, cc.RayCastType.Closest);
+        this.endWorldPos = this.arms.convertToWorldSpace(this.blankNode.position);
         if (results.length > 0) {
             this.colliderPoint = this.arms.convertToNodeSpace(results[0].point);
             if (results[0].point) this.endWorldPos = results[0].point;
@@ -179,9 +178,9 @@ cc.Class({
         }
 
         //不添加的话线的方向会错误。加了的话，显示的数量又不正确了。
-        let radius = endPos.signAngle(startPos);
-        var angle =  radius * 180 / Math.PI;
-        this.pointLayout.node.rotation = -angle;
+        // let radius = endPos.signAngle(startPos);
+        // var angle =  radius * 180 / Math.PI;
+        // this.pointLayout.node.rotation = -angle;
     },
 
     //移除轨迹点
