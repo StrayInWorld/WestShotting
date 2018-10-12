@@ -20,8 +20,8 @@ cc.Class({
     onBeginContact: function (contact, selfCollider, otherCollider) {
         // let newLinearVelocity = this.rigidBody.linearVelocity;
         // this.rigidBody.linearVelocity = cc.v2(-newLinearVelocity.x,-newLinearVelocity.y);
-
         // cc.log(this.rigidBody.linearVelocity);
+
         this.colliderNum -= 1;
         // cc.log(this.colliderNum);
         if (this.colliderNum < 0) {
@@ -30,18 +30,7 @@ cc.Class({
         if (this.colliderNum === 0) {
             this.recoverItemToPool();
         }
-        // if(otherCollider.group === BulletConfig.ColliderNum.Wall){
 
-        // }
-        // else if(otherCollider.group === BulletConfig.ColliderNum.Square){
-
-        // }
-        // else if(otherCollider.group === BulletConfig.ColliderNum.TriSquare){
-
-        // }
-        // else if(otherCollider.group === BulletConfig.ColliderNum.OtherObj){
-
-        // }
 
     },
 
@@ -65,3 +54,17 @@ cc.Class({
 
     },
 });
+
+        // if(otherCollider.group === BulletConfig.ColliderNum.Wall){
+
+        // }
+        // else if(otherCollider.group === BulletConfig.ColliderNum.Square){
+
+        // }
+        // else if(otherCollider.group === BulletConfig.ColliderNum.TriSquare){
+
+        // }
+        // else if(otherCollider.group === BulletConfig.ColliderNum.OtherObj){
+
+        // }
+

@@ -16,7 +16,7 @@ cc.Class({
         this.blankNode = cc.find("Canvas/player/arms/blankNode");
         this.armsOpen = cc.find("Canvas/player/arms/armsOpen");
         this.trackSprites = [];      //装轨迹点
-        this.endWorldPos = cc.v2(0,0);
+        this.endWorldPos = cc.v2(0, 0);
 
         //添加瞄准线对象池
         this.basicPointPool = new cc.NodePool();
@@ -69,14 +69,14 @@ cc.Class({
                 bulletComp.colliderNum = 5;
 
                 //设置初速度
-                let bulletRigid =  bullet.getComponent(cc.RigidBody);
+                let bulletRigid = bullet.getComponent(cc.RigidBody);
                 let worldPos = this.node.convertToWorldSpaceAR(bullet.position);
                 let vec = cc.v2(this.endWorldPos).sub(worldPos);
-                let velocity =  vec.normalize().mulSelf(150);        
-                cc.log("velocity:",velocity);
+                let velocity = vec.normalize().mulSelf(150);
+                cc.log("velocity:", velocity);
 
                 // bulletRigid.linearVelocity = velocity;
-                bulletRigid.applyLinearImpulse(velocity,bulletRigid.getWorldCenter(), true);
+                bulletRigid.applyLinearImpulse(velocity, bulletRigid.getWorldCenter(), true);
             }, this);
 
         }, this);
@@ -144,7 +144,7 @@ cc.Class({
         //空白点的位置
         let blankNodePos = this.arms.convertToWorldSpace(this.blankNode.position);
         this.getRaysEndPos(armsOpenPos, blankNodePos);
-        cc.log("触摸：",event.getLocation());
+        cc.log("触摸：", event.getLocation());
     },
 
     //获取射线终点坐标
@@ -153,8 +153,7 @@ cc.Class({
         var results = cc.director.getPhysicsManager().rayCast(startPos, endPos, cc.RayCastType.Closest);
         if (results.length > 0) {
             this.colliderPoint = this.arms.convertToNodeSpace(results[0].point);
-            if(results[0].point)  this.endWorldPos = results[0].point;
-            // cc.log("接触点：",results[0].point);
+            if (results[0].point) this.endWorldPos = results[0].point;
         }
 
         if (!this.colliderPoint) {
@@ -178,6 +177,11 @@ cc.Class({
             this.pointLayout.node.addChild(trackSpriteTemplate);
             this.trackSprites.push(trackSpriteTemplate);
         }
+
+        //不添加的话线的方向会错误。加了的话，显示的数量又不正确了。
+        let radius = endPos.signAngle(startPos);
+        var angle =  radius * 180 / Math.PI;
+        this.pointLayout.node.rotation = -angle;
     },
 
     //移除轨迹点
