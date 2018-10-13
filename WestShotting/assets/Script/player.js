@@ -43,8 +43,8 @@ cc.Class({
 
         //入场抖动枪
         let armAction = cc.repeat(cc.sequence(cc.rotateBy(0.25, 3), cc.rotateBy(0.25, 0), cc.rotateBy(0.25, -3), cc.rotateBy(0.25, 0)), 2);
+        //抖动枪之后添加事件监听
         let touchAction = cc.callFunc(function () {
-            //添加界面监听
             parentNode.on("touchstart", function (event) {
                 this.removeTrackSprites();
                 this.touchStartMove(event);
@@ -149,6 +149,7 @@ cc.Class({
     getRaysEndPos(startPos, endPos) {
         //射线检测
         var results = cc.director.getPhysicsManager().rayCast(startPos, endPos, cc.RayCastType.Closest);
+        //重置终点坐标
         this.endWorldPos = this.arms.convertToWorldSpace(this.blankNode.position);
         if (results.length > 0) {
             this.colliderPoint = this.arms.convertToNodeSpace(results[0].point);
@@ -177,10 +178,12 @@ cc.Class({
             this.trackSprites.push(trackSpriteTemplate);
         }
 
-        //不添加的话线的方向会错误。加了的话，显示的数量又不正确了。
-        // let radius = endPos.signAngle(startPos);
-        // var angle =  radius * 180 / Math.PI;
-        // this.pointLayout.node.rotation = -angle;
+        //不添加的话线的方向会错误。加了的话，显示的箭头数量是旋转之前的终点。
+        let radius = endPos.signAngle(startPos);
+        var angle =  radius * 180 / Math.PI;
+        this.pointLayout.node.rotation = -angle;
+
+
     },
 
     //移除轨迹点
