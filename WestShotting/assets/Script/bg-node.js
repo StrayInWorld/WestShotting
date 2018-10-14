@@ -8,32 +8,23 @@ cc.Class({
     extends: cc.Component,
 
     properties: {
-        frontBgAry: [cc.Node],   //用于管理背景图片结点的数组
-        frontBgSpeed: 0.6,       //移动时控制速度的变量
-        frontBgErrorDistance: 10,//前景移动误差
+        backBgAry: [cc.Node],   //用于管理移动背景图片结点的数组
+        backBgSpeed: 0.6,       //移动时控制速度的变量
+        backBgErrorDistance: 10,//前景移动误差
+
+        frontBgAry: [cc.Node],
+        frontBgSpeed: 0.6,
+        frontBgErrorDistance: 10,
+
+        mountainBgAry: [cc.Node],
+        mountainBgSpeed: 0.6,
+        mountainBgErrorDistance: 10,
     },
 
     // LIFE-CYCLE CALLBACKS:
 
     onLoad() {
         let canvasNode = cc.find("Canvas");
-
-        //翻转第二张背景的山的图
-        let secondBgGround = cc.find("backGroundNode/backGround2", this.node);
-        secondBgGround.runAction(cc.flipX(true));
-
-        //翻转第二张山的图
-        let mountain2 = cc.find("mountainNode/mountain2", this.node);
-        mountain2.runAction(cc.flipX(true));
-
-        //翻转第二张前景的图
-        let frontGround1 = cc.find("frontGroundNode/frontGround1", this.node);
-        let frontGroundWidget = frontGround1.getComponent(cc.Widget);
-        frontGroundWidget.updateAlignment();
-
-        let frontGround2 = cc.find("frontGroundNode/frontGround2", this.node);
-        frontGround2.setPosition(frontGround1.width - canvasNode.width / 2, frontGround1.position.y);
-        frontGround2.runAction(cc.flipX(true));
 
         //云动画
         let groundNodeCloud = cc.find("cloudNode", this.node);
@@ -48,95 +39,74 @@ cc.Class({
             )
         ));
 
-        //前景动画（包括太阳）
-        let firstFrontGround = cc.find("frontGroundNode/frontGround1", this.node);
-        let resetPos = cc.v2(canvasNode.width, firstFrontGround.y);
-        let firstMoveX = firstFrontGround.width - canvasNode.width;  //长度-屏幕宽度
+        //翻转第二张背景的图
+        let backGround1 = cc.find("backGroundNode/backGround1", this.node);
+        let backGroundWidget = backGround1.getComponent(cc.Widget);
+        backGroundWidget.updateAlignment();
+        let backGround2 = cc.find("backGroundNode/backGround2", this.node);
+        backGround2.setPosition(backGround1.width - canvasNode.width / 2, backGround1.position.y);
+        backGround2.runAction(cc.flipX(true));
 
-        //山动画
-        let mountain = cc.find("mountainNode/mountain1", this.node);
-        let secondMountain = cc.find("mountainNode/mountain2", this.node);
-        let mountaisMovsX = mountain.width;
-        let mountainActionTime = 60 * 7;
-        mountain.runAction(cc.repeatForever(
-            cc.sequence(
-                cc.moveBy(mountainActionTime, cc.v2(-mountaisMovsX, 0)),
-                cc.callFunc(function () {
-                    cc.log("1");
-                    secondMountain.runAction(
-                        cc.sequence(
-                            cc.moveBy(mountainActionTime, cc.v2(-mountaisMovsX, 0)),
-                            cc.callFunc(function () {
-                                cc.log("2");
-                            }),
-                            cc.place(resetPos)
-                        )
-                    )
-                }),
-                cc.place(resetPos)
-            )
-        ));
+        //翻转第二张山的图
+        let mountain1 = cc.find("mountainNode/mountain1", this.node);
+        let mountainGroundWidget = mountain1.getComponent(cc.Widget);
+        mountainGroundWidget.updateAlignment();
+        let mountain2 = cc.find("mountainNode/mountain2", this.node);
+        mountain2.setPosition(mountain1.width - canvasNode.width / 2, mountain1.position.y);
+        mountain2.runAction(cc.flipX(true));
 
+        //翻转第二张前景的图
+        let frontGround1 = cc.find("frontGroundNode/frontGround1", this.node);
+        let frontGroundWidget = frontGround1.getComponent(cc.Widget);
+        frontGroundWidget.updateAlignment();
+        let frontGround2 = cc.find("frontGroundNode/frontGround2", this.node);
+        frontGround2.setPosition(frontGround1.width - canvasNode.width / 2, frontGround1.position.y);
+        frontGround2.runAction(cc.flipX(true));
 
-        //背景动画
-        let backGround = cc.find("backGroundNode/backGround1", this.node);
-        let backGroundActionTime = 60 * 9;
-        let backGroundFristTime = 60 * 7;
-        let backGroundSecondTime = 60 * 5;
-        backGround.runAction(cc.repeatForever(
-            cc.sequence(
-                cc.moveBy(backGroundActionTime, cc.v2(-firstMoveX, 0)),
-                cc.callFunc(function () {
-                    cc.log("1");
-                    secondBgGround.runAction(
-                        cc.sequence(
-                            cc.moveBy(mountainActionTime, cc.v2(-mountaisMovsX, 0)),
-                            cc.callFunc(function () {
-                                cc.log("2");
-                            }),
-                            cc.place(resetPos)
-                        )
-                    )
-                }),
-                cc.place(resetPos)
-            )
-        ));
+        this.backBgOriginX1 = this.backBgAry[0].x;
+        this.backBgOriginX2 = this.backBgAry[1].x;
 
         this.frontBgOriginX1 = this.frontBgAry[0].x;
         this.frontBgOriginX2 = this.frontBgAry[1].x;
+
+        this.mountainBgOriginX1 = this.mountainBgAry[0].x;
+        this.mountainBgOriginX2 = this.mountainBgAry[1].x;
     },
-    update(dt) {
-        this.moveFrontBg(this.frontBgAry, this.frontBgSpeed);
-    },
-    moveFrontBg: function (bgList, speed) {
-        let originX1 = this.frontBgOriginX1;
-        let originX2 = this.frontBgOriginX2;
+
+    /**
+     * @method 移动背景函数
+     * @param {Array} bgList  要移动的背景节点数组
+     * @param {Number} speed  移动的速度，值越大，移动越快
+     * @param {Number} bgOriginX1  第一张背景图初始横坐标
+     * @param {Number} bgOriginX2  第二张背景图初始横坐标
+     */
+    moveBg(bgList, speed, bgOriginX1, bgOriginX2, errorDistancae) {
+        let originX1 = bgOriginX1;
+        let originX2 = bgOriginX2;
         let resetPos = originX2;
+        let bgLimit = originX1 - bgList[0].width;
 
-        // cc.log("bgList[0].x:", bgList[0].x);
-        // cc.log("bgList[1]:", bgList[1].x);
-
-        let frontBgLimit = originX1 - bgList[0].width;
-
-        //二张图片一起滚动
         for (var index = 0; index < bgList.length; index++) {
-            //根据误差修改位置
-            if (bgList[0].x <= frontBgLimit) {
+            if (bgList[0].x <= bgLimit) {
                 let errorPos = originX1 - bgList[1].x;
-                bgList[0].x = resetPos - errorPos - this.frontBgErrorDistance;
+                bgList[0].x = resetPos - errorPos - errorDistancae;
             }
 
-            if (bgList[1].x <= frontBgLimit) {
+            if (bgList[1].x <= bgLimit) {
                 bgList[1].x = resetPos;
                 let errorPos = originX1 - bgList[0].x;
-                bgList[1].x = resetPos - errorPos - this.frontBgErrorDistance;
+                bgList[1].x = resetPos - errorPos - errorDistancae;
             }
             bgList[index].x -= speed;
-
-            // cc.log("bgList[0].x:", bgList[0].x);
-            // cc.log("bgList[1]:", bgList[1].x);
         }
     },
+    update(dt) {
+        this.moveBg(this.backBgAry, this.backBgSpeed, this.backBgOriginX1, this.backBgOriginX2, this.backBgErrorDistance);
+        this.moveBg(this.frontBgAry, this.frontBgSpeed, this.frontBgOriginX1, this.frontBgOriginX2, this.frontBgErrorDistance);
+        this.moveBg(this.mountainBgAry, this.mountainBgSpeed, this.mountainBgOriginX1, this.mountainBgOriginX2, this.mountainBgErrorDistance);
+    },
+
+
     start() {
 
     }
