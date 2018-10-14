@@ -27,7 +27,7 @@ cc.Class({
         this.layoutNodeRotation = 0;
 
 
-        //添加瞄准线对象池
+        //瞄准线对象池
         this.basicPointPool = new cc.NodePool();
         for (let i = 0; i < 5; i++) {
             let basicPoint = cc.instantiate(this.BasicPoint);
@@ -79,16 +79,14 @@ cc.Class({
 
                 //设置初速度
                 let bulletRigid = bullet.getComponent(cc.RigidBody);
-                let worldPos = this.node.convertToWorldSpaceAR(bullet.position);
-                let realEndPos = this.endWorldPos.rotate(this.layoutNodeRotation);
-                let vec = cc.v2(realEndPos).sub(worldPos);
-                let velocity = vec.normalize().mulSelf(150);
+                let worldPos = this.armsOpen.convertToWorldSpaceAR(bullet.position);
+                // let realEndPos = this.endWorldPos.rotate(this.layoutNodeRotation);
+                let vec = cc.v2(this.endWorldPos).sub(worldPos);
+                let velocity = vec.normalize().mulSelf(850);
                 cc.log("velocity:", velocity);
 
-
-
-                // bulletRigid.linearVelocity = velocity;
-                bulletRigid.applyLinearImpulse(velocity, bulletRigid.getWorldCenter(), true);
+                bulletRigid.linearVelocity = velocity;
+                // bulletRigid.applyLinearImpulse(velocity, bulletRigid.getWorldCenter(), true);
             }, this);
 
         }, this);
@@ -165,7 +163,10 @@ cc.Class({
         this.endWorldPos = this.arms.convertToWorldSpace(this.blankNode.position);
         if (results.length > 0) {
             this.colliderPoint = this.arms.convertToNodeSpace(results[0].point);
-            if (results[0].point) this.endWorldPos = results[0].point;
+            if (results[0].point) {
+                this.endWorldPos = results[0].point;
+                cc.log("have", this.endWorldPos);
+            }
         }
 
         if (!this.colliderPoint) {
