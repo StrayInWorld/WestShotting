@@ -27,8 +27,13 @@ cc.Class({
         mountain2.runAction(cc.flipX(true));
 
         //翻转第二张前景的图
-        // let frontGround2 = cc.find("frontGroundNode/frontGround2", this.node);
-        // frontGround2.runAction(cc.flipX(true));
+        let frontGround1 = cc.find("frontGroundNode/frontGround1", this.node);
+        let frontGroundWidget = frontGround1.getComponent(cc.Widget);
+        frontGroundWidget.updateAlignment();
+
+        let frontGround2 = cc.find("frontGroundNode/frontGround2", this.node);
+        frontGround2.setPosition(frontGround1.width - canvasNode.width / 2, frontGround1.position.y);
+        frontGround2.runAction(cc.flipX(true));
 
         //云动画
         let groundNodeCloud = cc.find("cloudNode", this.node);
@@ -108,6 +113,9 @@ cc.Class({
         let originX2 = this.frontBgOriginX2;
         let resetPos = originX2;
 
+        // cc.log("bgList[0].x:", bgList[0].x);
+        // cc.log("bgList[1]:", bgList[1].x);
+
         let frontBgLimit = originX1 - bgList[0].width;
 
         //二张图片一起滚动
@@ -127,12 +135,7 @@ cc.Class({
 
             // cc.log("bgList[0].x:", bgList[0].x);
             // cc.log("bgList[1]:", bgList[1].x);
-            // cc.log("frontBgLimit:", frontBgLimit);
         }
-
-
-
-
     },
     start() {
 
