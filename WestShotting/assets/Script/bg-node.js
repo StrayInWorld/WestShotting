@@ -1,9 +1,16 @@
+/**
+ * 背景图所挂载节点
+ * @class bg-node
+ * @constructor
+ */
+
 
 cc.Class({
     extends: cc.Component,
 
     properties: {
-
+        bg_ary: [cc.Node],  //用于管理背景图片结点的数组
+        bg_speed: 0.6,   //移动时控制速度的变量
     },
 
     // LIFE-CYCLE CALLBACKS:
@@ -20,8 +27,8 @@ cc.Class({
         mountain2.runAction(cc.flipX(true));
 
         //翻转第二张前景的图
-        let frontGround2 = cc.find("frontGroundNode/frontGround2", this.node);
-        frontGround2.runAction(cc.flipX(true));
+        // let frontGround2 = cc.find("frontGroundNode/frontGround2", this.node);
+        // frontGround2.runAction(cc.flipX(true));
 
         //云动画
         let groundNodeCloud = cc.find("cloudNode", this.node);
@@ -37,46 +44,15 @@ cc.Class({
         ));
 
         //前景动画（包括太阳）
-        let frontGroundNode = cc.find("frontGroundNode", this.node);
-        let frontGround = cc.find("frontGroundNode/frontGround1", this.node);
-        let secondFrontGround = cc.find("frontGroundNode/frontGround2", this.node);
-        let resetPos = cc.v2(canvasNode.width, frontGround.y);
-        let firstMoveX = frontGround.width - canvasNode.width;  //长度-屏幕宽度
-        let secondMoveX = canvasNode.width; //屏幕宽度
-        let firstActionTime = 60*5;
-        let secondActionTime = 60*4;
-        let thirdActionTime = 60*4;
-
-        frontGround.runAction(cc.repeatForever(
-            cc.sequence(
-                cc.moveBy(firstActionTime, cc.v2(-firstMoveX, 0)),
-                cc.spawn(
-                    cc.callFunc(function () {
-                        cc.log("1");
-                        secondFrontGround.runAction(
-                            cc.sequence(
-                                cc.moveBy(secondActionTime, cc.v2(-secondMoveX, 0)),
-                                cc.moveBy(firstActionTime, cc.v2(-firstMoveX, 0)),
-                                cc.moveBy(thirdActionTime, cc.v2(-secondMoveX, 0)),
-                                cc.place(resetPos),
-                                cc.callFunc(function () {
-                                    cc.log("2")
-                                })
-                            )
-                        )
-                    }),
-                    cc.moveBy(secondActionTime, cc.v2(-secondMoveX, 0)),
-                ),
-                cc.place(resetPos),
-                cc.delayTime(thirdActionTime)
-            )
-        ));
+        let firstFrontGround = cc.find("frontGroundNode/frontGround1", this.node);
+        let resetPos = cc.v2(canvasNode.width, firstFrontGround.y);
+        let firstMoveX = firstFrontGround.width - canvasNode.width;  //长度-屏幕宽度
 
         //山动画
         let mountain = cc.find("mountainNode/mountain1", this.node);
         let secondMountain = cc.find("mountainNode/mountain2", this.node);
         let mountaisMovsX = mountain.width;
-        let mountainActionTime = 60*7;
+        let mountainActionTime = 60 * 7;
         mountain.runAction(cc.repeatForever(
             cc.sequence(
                 cc.moveBy(mountainActionTime, cc.v2(-mountaisMovsX, 0)),
@@ -98,10 +74,10 @@ cc.Class({
 
 
         //背景动画
-        let backGround = cc.find("backGroundNode/backGround1",this.node);
-        let backGroundActionTime = 60*9;
-        let backGroundFristTime = 60*7;
-        let backGroundSecondTime = 60*5;
+        let backGround = cc.find("backGroundNode/backGround1", this.node);
+        let backGroundActionTime = 60 * 9;
+        let backGroundFristTime = 60 * 7;
+        let backGroundSecondTime = 60 * 5;
         backGround.runAction(cc.repeatForever(
             cc.sequence(
                 cc.moveBy(backGroundActionTime, cc.v2(-firstMoveX, 0)),
@@ -120,11 +96,51 @@ cc.Class({
                 cc.place(resetPos)
             )
         ));
+
+        this.bgOriginX1 = this.bg_ary[0].x;
+        this.bgOriginX2 = this.bg_ary[1].x;
+    },
+    update(dt) {
+        this.bgMove(this.bg_ary, this.bg_speed);
     },
 
+
+    bgMove: function (bgList, speed) {
+        let originX1 = this.bgOriginX1;
+        let originX2 = this.bgOriginX2;
+        let resetPos = originX2;
+
+        let bgLimit1 = originX1 - bgList[0].width;
+        let bgLimit2 = originX2 - 2 * bgList[1].width;
+
+        //每次循环二张图片一起滚动
+        for (var index = 0; index < bgList.length; index++) {
+            //根据误差修改位置
+            if (bgList[0].x <= bgLimit1) {
+                let errorPos = originX1 - bgList[1].x;
+                bgList[0].x = resetPos - errorPos - 10;
+            }
+
+            if (bgList[1].x <= bgLimit1) {
+                bgList[1].x = resetPos;
+                let errorPos = originX1 - bgList[0].x;
+                bgList[1].x = resetPos - errorPos - 10;
+            }
+            bgList[index].x -= speed;
+
+            // cc.log("bgList[0].x:", bgList[0].x);
+            // cc.log("bgList[1]:", bgList[1].x);
+            // cc.log("bgLimit1:", bgLimit1);
+
+
+        }
+
+
+
+
+    },
     start() {
 
-    },
+    }
 
-    update(dt) { },
 });
