@@ -24,6 +24,8 @@ cc.Class({
         this.armsOpen = cc.find("Canvas/player/arms/armsOpen");
         this.trackSprites = [];      //装轨迹点
         this.endWorldPos = cc.v2(0, 0);
+        this.layoutNodeRotation = 0;
+
 
         //添加瞄准线对象池
         this.basicPointPool = new cc.NodePool();
@@ -78,9 +80,12 @@ cc.Class({
                 //设置初速度
                 let bulletRigid = bullet.getComponent(cc.RigidBody);
                 let worldPos = this.node.convertToWorldSpaceAR(bullet.position);
-                let vec = cc.v2(this.endWorldPos).sub(worldPos);
+                let realEndPos = this.endWorldPos.rotate(this.layoutNodeRotation);
+                let vec = cc.v2(realEndPos).sub(worldPos);
                 let velocity = vec.normalize().mulSelf(150);
                 cc.log("velocity:", velocity);
+
+
 
                 // bulletRigid.linearVelocity = velocity;
                 bulletRigid.applyLinearImpulse(velocity, bulletRigid.getWorldCenter(), true);
@@ -188,7 +193,7 @@ cc.Class({
         //不添加的话线的方向会错误。加了的话，显示的箭头数量是旋转之前的终点。
         let radius = endPos.signAngle(startPos);
         var angle = radius * 180 / Math.PI;
-        this.pointLayout.node.rotation = -angle;
+        this.layoutNodeRotation = radius;
 
 
     },

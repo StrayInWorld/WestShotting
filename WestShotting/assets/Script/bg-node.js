@@ -12,13 +12,14 @@ cc.Class({
         backBgSpeed: 0.6,       //移动时控制速度的变量
         backBgErrorDistance: 10,//前景移动误差
 
+        mountainBgAry: [cc.Node],
+        mountainBgSpeed: 0.6,
+        mountainBgErrorDistance: 10,
+
         frontBgAry: [cc.Node],
         frontBgSpeed: 0.6,
         frontBgErrorDistance: 10,
 
-        mountainBgAry: [cc.Node],
-        mountainBgSpeed: 0.6,
-        mountainBgErrorDistance: 10,
     },
 
     // LIFE-CYCLE CALLBACKS:
