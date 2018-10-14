@@ -1,4 +1,10 @@
-//创建物理边界
+/**
+ *  创建物理边界 
+ *  @class PhysicsBound
+ *  @constructor
+ */
+
+
 cc.Class({
     extends: cc.Component,
 

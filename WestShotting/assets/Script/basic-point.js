@@ -1,3 +1,4 @@
+//瞄准线
 cc.Class({
     extends: cc.Component,
 
@@ -11,7 +12,6 @@ cc.Class({
     },
 
     start () {
-        // this.node.run
     },
 
     // update (dt) {},

@@ -1,3 +1,10 @@
+/**
+ * 玩家控制人物所挂在组件
+ * @class player
+ * @constructor
+ */
+
+
 cc.Class({
     extends: cc.Component,
 
@@ -180,7 +187,7 @@ cc.Class({
 
         //不添加的话线的方向会错误。加了的话，显示的箭头数量是旋转之前的终点。
         let radius = endPos.signAngle(startPos);
-        var angle =  radius * 180 / Math.PI;
+        var angle = radius * 180 / Math.PI;
         this.pointLayout.node.rotation = -angle;
 
 

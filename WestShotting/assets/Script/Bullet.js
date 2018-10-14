@@ -1,3 +1,9 @@
+/**
+ * 子弹所挂在组件
+ * @class Bullet
+ * @constructor
+ */
+
 let BulletConfig = require("BulletConfig");
 
 cc.Class({
@@ -41,7 +47,7 @@ cc.Class({
         this.node.rotation = 0;
         this.poolManager = poolManager;
     },
-    recoverItemToPool(){
+    recoverItemToPool() {
         if (this.poolManager) {
             this.poolManager.put(this.node);
         }

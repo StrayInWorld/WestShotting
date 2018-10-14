@@ -1,3 +1,9 @@
+/**
+大厅盒子按钮回调
+@class box-btn 
+@constructor
+*/
+
 cc.Class({
     extends: cc.Component,
 

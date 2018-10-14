@@ -1,3 +1,9 @@
+/**
+ * 游戏主逻辑
+ * @ class game
+ * @constructor
+ */
+
 cc.Class({
     extends: cc.Component,
 

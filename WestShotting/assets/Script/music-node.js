@@ -1,3 +1,9 @@
+/**
+ * 按钮组件
+ * @class msuci-node
+ * @constructor
+ */
+
 cc.Class({
     extends: cc.Component,
 
@@ -7,11 +13,11 @@ cc.Class({
             default: null
         },
     },
-    musicBtnCB(){
-        if(this.audioSource.isPlaying){
+    musicBtnCB() {
+        if (this.audioSource.isPlaying) {
             this.pause();
         }
-        else{
+        else {
             this.play();
         }
     },
