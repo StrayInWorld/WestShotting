@@ -4,13 +4,13 @@
  * @constructor
  */
 
-
 cc.Class({
     extends: cc.Component,
 
     properties: {
-        bg_ary: [cc.Node],  //用于管理背景图片结点的数组
-        bg_speed: 0.6,   //移动时控制速度的变量
+        frontBgAry: [cc.Node],   //用于管理背景图片结点的数组
+        frontBgSpeed: 0.6,       //移动时控制速度的变量
+        frontBgErrorDistance: 10,//前景移动误差
     },
 
     // LIFE-CYCLE CALLBACKS:
@@ -97,42 +97,37 @@ cc.Class({
             )
         ));
 
-        this.bgOriginX1 = this.bg_ary[0].x;
-        this.bgOriginX2 = this.bg_ary[1].x;
+        this.frontBgOriginX1 = this.frontBgAry[0].x;
+        this.frontBgOriginX2 = this.frontBgAry[1].x;
     },
     update(dt) {
-        this.bgMove(this.bg_ary, this.bg_speed);
+        this.moveFrontBg(this.frontBgAry, this.frontBgSpeed);
     },
-
-
-    bgMove: function (bgList, speed) {
-        let originX1 = this.bgOriginX1;
-        let originX2 = this.bgOriginX2;
+    moveFrontBg: function (bgList, speed) {
+        let originX1 = this.frontBgOriginX1;
+        let originX2 = this.frontBgOriginX2;
         let resetPos = originX2;
 
-        let bgLimit1 = originX1 - bgList[0].width;
-        let bgLimit2 = originX2 - 2 * bgList[1].width;
+        let frontBgLimit = originX1 - bgList[0].width;
 
-        //每次循环二张图片一起滚动
+        //二张图片一起滚动
         for (var index = 0; index < bgList.length; index++) {
             //根据误差修改位置
-            if (bgList[0].x <= bgLimit1) {
+            if (bgList[0].x <= frontBgLimit) {
                 let errorPos = originX1 - bgList[1].x;
-                bgList[0].x = resetPos - errorPos - 10;
+                bgList[0].x = resetPos - errorPos - this.frontBgErrorDistance;
             }
 
-            if (bgList[1].x <= bgLimit1) {
+            if (bgList[1].x <= frontBgLimit) {
                 bgList[1].x = resetPos;
                 let errorPos = originX1 - bgList[0].x;
-                bgList[1].x = resetPos - errorPos - 10;
+                bgList[1].x = resetPos - errorPos - this.frontBgErrorDistance;
             }
             bgList[index].x -= speed;
 
             // cc.log("bgList[0].x:", bgList[0].x);
             // cc.log("bgList[1]:", bgList[1].x);
-            // cc.log("bgLimit1:", bgLimit1);
-
-
+            // cc.log("frontBgLimit:", frontBgLimit);
         }
 
 
