@@ -61,7 +61,7 @@ cc.Class({
             }
             //修改headNode刚体上的重力
             let headNodeRigid = otherCollider.getComponent(cc.RigidBody);
-            headNodeRigid.gravityScale = 1;
+            headNodeRigid.gravityScale = 3;
 
             let head = headNode.getChildByName("head");
             if (head.active) {
