@@ -55,7 +55,7 @@ cc.Class({
                 enemyBody = otherCollider.node.parent;
                 headNode = otherCollider.node;
             }
-            else if (otherCollider.node.parent.parent.name === "PlayerBody") {
+            else if (otherCollider.node.parent.parent.name === "EnemyBody") {
                 enemyBody = otherCollider.node.parent.parent;
                 headNode = enemyBody.getChildByName("headNode");
             }
@@ -94,7 +94,13 @@ cc.Class({
         else if (otherCollider.node.group === "woodSquare") { //木箱
 
         }
-
+        else if (otherCollider.node.group === "bomb") { //炸弹
+            //播放爆炸效果（范围性）
+            let bombEffect = otherCollider.node.getChildByName("BombEffect");
+            bombEffect.active = true;
+            let bombAnimation = bombEffect.getComponent(cc.Animation);
+            let animateState = bombAnimation.play();
+        }
     },
     onEndContact: function (contact, selfCollider, otherCollider) {
         let Velocity = this.rigidBody.linearVelocity;

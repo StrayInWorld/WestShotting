@@ -55,5 +55,201 @@
       }
     }
   },
-  "events": []
+  "events": [
+    {
+      "frame": 0.5,
+      "func": "noPlayAnima",
+      "params": []
+    },
+    {
+      "frame": 0.5166666666666667,
+      "func": "noPlayAnima",
+      "params": []
+    },
+    {
+      "frame": 0.5166666666666667,
+      "func": "noPlayAnima",
+      "params": []
+    },
+    {
+      "frame": 0.5166666666666667,
+      "func": "noPlayAnima",
+      "params": []
+    },
+    {
+      "frame": 0.5166666666666667,
+      "func": "noPlayAnima",
+      "params": []
+    },
+    {
+      "frame": 0.5166666666666667,
+      "func": "noPlayAnima",
+      "params": []
+    },
+    {
+      "frame": 0.5166666666666667,
+      "func": "",
+      "params": []
+    },
+    {
+      "frame": 0.5166666666666667,
+      "func": "noPlayAnima",
+      "params": []
+    },
+    {
+      "frame": 0.5166666666666667,
+      "func": "noPlayAnima",
+      "params": []
+    },
+    {
+      "frame": 0.5166666666666667,
+      "func": "noPlayAnima",
+      "params": []
+    },
+    {
+      "frame": 0.5166666666666667,
+      "func": "noPlayAnima",
+      "params": []
+    },
+    {
+      "frame": 0.5166666666666667,
+      "func": "noPlayAnima",
+      "params": []
+    },
+    {
+      "frame": 0.5166666666666667,
+      "func": "noPlayAnima",
+      "params": []
+    },
+    {
+      "frame": 0.5166666666666667,
+      "func": "noPlayAnima",
+      "params": []
+    },
+    {
+      "frame": 0.5166666666666667,
+      "func": "noPlayAnima",
+      "params": []
+    },
+    {
+      "frame": 0.5166666666666667,
+      "func": "noPlayAnima",
+      "params": []
+    },
+    {
+      "frame": 0.5166666666666667,
+      "func": "noPlayAnima",
+      "params": []
+    },
+    {
+      "frame": 0.5166666666666667,
+      "func": "noPlayAnima",
+      "params": []
+    },
+    {
+      "frame": 0.5166666666666667,
+      "func": "noPlayAnima",
+      "params": []
+    },
+    {
+      "frame": 0.5166666666666667,
+      "func": "noPlayAnima",
+      "params": []
+    },
+    {
+      "frame": 0.5166666666666667,
+      "func": "noPlayAnima",
+      "params": []
+    },
+    {
+      "frame": 0.5166666666666667,
+      "func": "noPlayAnima",
+      "params": []
+    },
+    {
+      "frame": 0.5166666666666667,
+      "func": "noPlayAnima",
+      "params": []
+    },
+    {
+      "frame": 0.5166666666666667,
+      "func": "noPlayAnima",
+      "params": []
+    },
+    {
+      "frame": 0.5166666666666667,
+      "func": "noPlayAnima",
+      "params": []
+    },
+    {
+      "frame": 0.5166666666666667,
+      "func": "",
+      "params": []
+    },
+    {
+      "frame": 0.5166666666666667,
+      "func": "",
+      "params": []
+    },
+    {
+      "frame": 0.5166666666666667,
+      "func": "",
+      "params": []
+    },
+    {
+      "frame": 0.5166666666666667,
+      "func": "",
+      "params": []
+    },
+    {
+      "frame": 0.5166666666666667,
+      "func": "",
+      "params": []
+    },
+    {
+      "frame": 0.5166666666666667,
+      "func": "",
+      "params": []
+    },
+    {
+      "frame": 0.5166666666666667,
+      "func": "",
+      "params": []
+    },
+    {
+      "frame": 0.5166666666666667,
+      "func": "",
+      "params": []
+    },
+    {
+      "frame": 0.5166666666666667,
+      "func": "",
+      "params": []
+    },
+    {
+      "frame": 0.5166666666666667,
+      "func": "",
+      "params": []
+    },
+    {
+      "frame": 0.5166666666666667,
+      "func": "",
+      "params": []
+    },
+    {
+      "frame": 0.5166666666666667,
+      "func": "",
+      "params": []
+    },
+    {
+      "frame": 0.5166666666666667,
+      "func": "noPlayAnima",
+      "params": []
+    },
+    {
+      "frame": 0.5166666666666667,
+      "func": "noPlayAnima",
+      "params": []
+    }
+  ]
 }
