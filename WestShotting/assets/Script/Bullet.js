@@ -19,32 +19,26 @@ cc.Class({
         this.colliderNum = 5;
         this.rigidBody = this.node.getComponent(cc.RigidBody);
     },
-
-    start() {
-        // this.poolManager = null;
+    start() { },
+    init(poolManager) {
+        if (this.poolManager === null) {
+            this.poolManager = poolManager;
+        }
     },
     onBeginContact: function (contact, selfCollider, otherCollider) {
-        // let newLinearVelocity = this.rigidBody.linearVelocity;
-        // this.rigidBody.linearVelocity = cc.v2(-newLinearVelocity.x,-newLinearVelocity.y);
-        // cc.log(this.rigidBody.linearVelocity);
-
         this.colliderNum -= 1;
-        // cc.log(this.colliderNum);
-        if (this.colliderNum < 0) {
+        cc.log(this.colliderNum);
+        if (this.colliderNum <= 0) {
+            this.recoverItemToPool();
             return;
         }
-        if (this.colliderNum === 0) {
-            this.recoverItemToPool();
-        }
-
-
     },
-
     onEndContact: function (contact, selfCollider, otherCollider) {
 
     },
     reuse(poolManager) {
         this.node.rotation = 0;
+        this.colliderNum = 5;
         this.poolManager = poolManager;
     },
     recoverItemToPool() {

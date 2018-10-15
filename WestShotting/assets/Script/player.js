@@ -24,8 +24,6 @@ cc.Class({
         this.armsOpen = cc.find("Canvas/player/arms/armsOpen");
         this.trackSprites = [];      //装轨迹点
         this.endWorldPos = cc.v2(0, 0);
-        this.layoutNodeRotation = 0;
-
 
         //瞄准线对象池
         this.basicPointPool = new cc.NodePool();
@@ -80,10 +78,8 @@ cc.Class({
                 //设置初速度
                 let bulletRigid = bullet.getComponent(cc.RigidBody);
                 let worldPos = this.armsOpen.convertToWorldSpaceAR(bullet.position);
-                // let realEndPos = this.endWorldPos.rotate(this.layoutNodeRotation);
                 let vec = cc.v2(this.endWorldPos).sub(worldPos);
-                let velocity = vec.normalize().mulSelf(850);
-                cc.log("velocity:", velocity);
+                let velocity = vec.normalize().mulSelf(2200);
 
                 bulletRigid.linearVelocity = velocity;
                 // bulletRigid.applyLinearImpulse(velocity, bulletRigid.getWorldCenter(), true);
@@ -105,6 +101,8 @@ cc.Class({
         } else {
             item = cc.instantiate(this.Bullet);
         }
+        let itemComp = item.getComponent("Bullet");
+        itemComp.init(this.bulletPool);
         return item;
     },
     recoverBulletToPool(item) {
@@ -152,7 +150,6 @@ cc.Class({
         let armsOpenPos = this.arms.convertToWorldSpace(this.armsOpen.position);  //枪口位置
         let blankNodePos = this.arms.convertToWorldSpace(this.blankNode.position);//空白点的位置
         this.getRaysEndPos(armsOpenPos, blankNodePos);                            //两点之间的接触点
-        cc.log("触摸：", event.getLocation());
     },
 
     //获取射线终点坐标
@@ -165,7 +162,6 @@ cc.Class({
             this.colliderPoint = this.arms.convertToNodeSpace(results[0].point);
             if (results[0].point) {
                 this.endWorldPos = results[0].point;
-                cc.log("have", this.endWorldPos);
             }
         }
 
@@ -190,13 +186,6 @@ cc.Class({
             this.pointLayout.node.addChild(trackSpriteTemplate);
             this.trackSprites.push(trackSpriteTemplate);
         }
-
-        //不添加的话线的方向会错误。加了的话，显示的箭头数量是旋转之前的终点。
-        let radius = endPos.signAngle(startPos);
-        var angle = radius * 180 / Math.PI;
-        this.layoutNodeRotation = radius;
-
-
     },
 
     //移除轨迹点
