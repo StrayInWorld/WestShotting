@@ -18,6 +18,9 @@ cc.Class({
     onLoad() {
         this.colliderNum = 5;
         this.rigidBody = this.node.getComponent(cc.RigidBody);
+        this.mulVelocityValue = 100;
+        this.onBeginVelocity = cc.v2(0, 0);
+        this.onEndVelocity = cc.v2(0, 0);
     },
     start() { },
     init(poolManager) {
@@ -27,13 +30,46 @@ cc.Class({
     },
     onBeginContact: function (contact, selfCollider, otherCollider) {
         this.colliderNum -= 1;
-        cc.log(this.colliderNum);
         if (this.colliderNum <= 0) {
             this.recoverItemToPool();
             return;
         }
+
+        let velocity = this.rigidBody.linearVelocity;
+        let normalizeVelocity = velocity.normalize().mulSelf(BulletConfig.MulVelocityVal);
+        this.onBeginVelocity = normalizeVelocity;
+        // cc.log("this.onBeginVelocity:", this.onBeginVelocity);
+
+        if (otherCollider.node.group === BulletConfig.ColliderNum.Wall) {         //与墙碰撞
+
+        }
+        else if (otherCollider.node.group === BulletConfig.ColliderNum.Square) {  //方块
+
+        }
+        else if (otherCollider.node.group === BulletConfig.ColliderNum.TriSquare) {//三角形
+
+        }
+        else if (otherCollider.node.group === BulletConfig.ColliderNum.OtherObj) { //其他物体
+
+        }
+
     },
     onEndContact: function (contact, selfCollider, otherCollider) {
+        let Velocity = this.rigidBody.linearVelocity;
+        let normalizeVelocity = Velocity.normalize().mulSelf(BulletConfig.MulVelocityVal);
+        this.onEndVelocity = normalizeVelocity;
+
+        let radius = this.onBeginVelocity.signAngle(this.onEndVelocity);
+        let rotation = radius * 180 / Math.PI;
+
+        // cc.log("this.onBeginVelocity", this.onBeginVelocity);
+        // cc.log("this.onEndVelocity", this.onEndVelocity);
+        // cc.log("radius:", radius);
+        // cc.log("rotation:", rotation);
+        if (selfCollider.node.getNumberOfRunningActions() === 0) {
+            let action = cc.rotateBy(0.001, -rotation);
+            selfCollider.node.runAction(action);
+        }
 
     },
     reuse(poolManager) {
@@ -55,16 +91,5 @@ cc.Class({
     },
 });
 
-        // if(otherCollider.group === BulletConfig.ColliderNum.Wall){
 
-        // }
-        // else if(otherCollider.group === BulletConfig.ColliderNum.Square){
-
-        // }
-        // else if(otherCollider.group === BulletConfig.ColliderNum.TriSquare){
-
-        // }
-        // else if(otherCollider.group === BulletConfig.ColliderNum.OtherObj){
-
-        // }
 

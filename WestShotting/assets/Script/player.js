@@ -4,6 +4,7 @@
  * @constructor
  */
 
+let BulletConfig = require("BulletConfig");
 
 cc.Class({
     extends: cc.Component,
@@ -79,7 +80,7 @@ cc.Class({
                 let bulletRigid = bullet.getComponent(cc.RigidBody);
                 let worldPos = this.armsOpen.convertToWorldSpaceAR(bullet.position);
                 let vec = cc.v2(this.endWorldPos).sub(worldPos);
-                let velocity = vec.normalize().mulSelf(2200);
+                let velocity = vec.normalize().mulSelf(BulletConfig.MulVelocityVal);
 
                 bulletRigid.linearVelocity = velocity;
                 // bulletRigid.applyLinearImpulse(velocity, bulletRigid.getWorldCenter(), true);
