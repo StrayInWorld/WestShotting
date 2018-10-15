@@ -16,7 +16,7 @@ cc.Class({
     // LIFE-CYCLE CALLBACKS:
 
     onLoad() {
-        this.colliderNum = 5;
+        this.colliderNum = BulletConfig.ColliderNum.Bullet;
         this.rigidBody = this.node.getComponent(cc.RigidBody);
         this.mulVelocityValue = 100;
         this.onBeginVelocity = cc.v2(0, 0);
@@ -38,18 +38,60 @@ cc.Class({
         let velocity = this.rigidBody.linearVelocity;
         let normalizeVelocity = velocity.normalize().mulSelf(BulletConfig.MulVelocityVal);
         this.onBeginVelocity = normalizeVelocity;
-        // cc.log("this.onBeginVelocity:", this.onBeginVelocity);
 
-        if (otherCollider.node.group === BulletConfig.ColliderNum.Wall) {         //与墙碰撞
-
-        }
-        else if (otherCollider.node.group === BulletConfig.ColliderNum.Square) {  //方块
+        if (otherCollider.node.group === "wall") {            //与墙碰撞
 
         }
-        else if (otherCollider.node.group === BulletConfig.ColliderNum.TriSquare) {//三角形
+        else if (otherCollider.node.group === "square") {     //方块
 
         }
-        else if (otherCollider.node.group === BulletConfig.ColliderNum.OtherObj) { //其他物体
+        else if (otherCollider.node.group === "trisquare") {  //三角形
+
+        }
+        else if (otherCollider.node.group === "enemy") {      //敌人
+            let enemyBody = null;
+            let headNode = null;
+            if (otherCollider.node.name === "headNode") {
+                enemyBody = otherCollider.node.parent;
+                headNode = otherCollider.node;
+            }
+            else if (otherCollider.node.parent.parent.name === "PlayerBody") {
+                enemyBody = otherCollider.node.parent.parent;
+                headNode = enemyBody.getChildByName("headNode");
+            }
+            //修改headNode刚体上的重力
+            let headNodeRigid = otherCollider.getComponent(cc.RigidBody);
+            headNodeRigid.gravityScale = 1;
+
+            let head = headNode.getChildByName("head");
+            if (head.active) {
+                //变换脸部状态
+                head.active = false;
+
+                //修改其他节点本身的重力
+                for (let i = 0; i < enemyBody.children.length; i++) {
+                    let item = enemyBody.children[i];
+                    if (item.name !== "headNode") {
+                        for (let j = 0; j < item.children.length; j++) {
+                            let itemChild = item.children[j];
+                            let rigidBody = itemChild.getComponent(cc.RigidBody);
+                            if (rigidBody) {
+                                rigidBody.gravityScale = 3;
+                            }
+                        }
+                    }
+                }
+                let colliderRigid = otherCollider.node.getComponent(cc.RigidBody);
+                colliderRigid.gravityScale = 1;
+
+                //播放血动画
+                let bloodEffect = enemyBody.getChildByName("BloodEffect");
+                bloodEffect.active = true;
+                let animation = bloodEffect.getComponent(cc.Animation);
+                animation.play();
+            }
+        }
+        else if (otherCollider.node.group === "woodSquare") { //木箱
 
         }
 
@@ -67,14 +109,13 @@ cc.Class({
         // cc.log("radius:", radius);
         // cc.log("rotation:", rotation);
         if (selfCollider.node.getNumberOfRunningActions() === 0) {
-            let action = cc.rotateBy(0.001, -rotation);
+            let action = cc.rotateBy(0.0001, -rotation);
             selfCollider.node.runAction(action);
         }
-
     },
     reuse(poolManager) {
         this.node.rotation = 0;
-        this.colliderNum = 5;
+        this.colliderNum = BulletConfig.ColliderNum.Bullet;
         this.poolManager = poolManager;
     },
     recoverItemToPool() {

@@ -8,8 +8,9 @@ module.exports = {
         Wall: 7,
         Square: 6,
         TriSquare: 5,
-        OtherObj: 4
+        OtherObj: 4,
+        Bullet: 5
     },
-    MulVelocityVal: 1500  //子弹的速度
+    MulVelocityVal: 1800  //子弹的速度
 
 }

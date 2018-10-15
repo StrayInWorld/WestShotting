@@ -15,12 +15,17 @@
       false,
       true,
       true,
+      true,
+      true,
       true
     ],
     [
       false,
       true,
       false,
+      true,
+      null,
+      true,
       true
     ],
     [
@@ -28,12 +33,34 @@
       true,
       true,
       false,
+      true,
+      null,
       true
     ],
     [
       false,
       true,
       false,
+      true,
+      false,
+      true,
+      true
+    ],
+    [
+      false,
+      true,
+      true,
+      false,
+      true,
+      false,
+      true
+    ],
+    [
+      false,
+      true,
+      true,
+      true,
+      true,
       true,
       false
     ]
@@ -48,7 +75,9 @@
     "bullet",
     "wall",
     "woodSquare",
-    "square"
+    "square",
+    "enemy",
+    "bomb"
   ],
   "simulator-orientation": false,
   "simulator-resolution": {
@@ -56,6 +85,5 @@
     "width": 960
   },
   "use-customize-simulator": false,
-  "use-project-simulator-setting": false,
-  "start-scene": "current"
+  "use-project-simulator-setting": false
 }
