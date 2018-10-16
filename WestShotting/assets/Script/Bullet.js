@@ -43,75 +43,28 @@ cc.Class({
 
         }
         else if (otherCollider.node.group === "enemy") {      //敌人
-            let enemyBody = null;
-            let headNode = null;
-            if (otherCollider.node.name === "headNode") {
-                enemyBody = otherCollider.node.parent;
-                headNode = otherCollider.node;
-            }
-            else if (otherCollider.node.parent.parent.name === "EnemyBody") {
-                enemyBody = otherCollider.node.parent.parent;
-                headNode = enemyBody.getChildByName("headNode");
-            }
-            //修改headNode刚体上的重力
-            let headNodeRigid = otherCollider.getComponent(cc.RigidBody);
-            headNodeRigid.gravityScale = 3;
-
-            let head = headNode.getChildByName("head");
-            if (head.active) {
-                //变换脸部状态
-                head.active = false;
-
-                //修改其他节点本身的重力
-                for (let i = 0; i < enemyBody.children.length; i++) {
-                    let item = enemyBody.children[i];
-                    if (item.name !== "headNode") {
-                        for (let j = 0; j < item.children.length; j++) {
-                            let itemChild = item.children[j];
-                            let rigidBody = itemChild.getComponent(cc.RigidBody);
-                            if (rigidBody) {
-                                rigidBody.gravityScale = 3;
-                            }
-                        }
-                    }
-                }
-                let colliderRigid = otherCollider.node.getComponent(cc.RigidBody);
-                colliderRigid.gravityScale = 1;
-
-                //播放血动画
-                let bloodEffect = enemyBody.getChildByName("BloodEffect");
-                bloodEffect.active = true;
-                let animation = bloodEffect.getComponent(cc.Animation);
-                animation.play();
-            }
+            this.dealWithEnemyEffect(otherCollider);
         }
         else if (otherCollider.node.group === "woodSquare") { //木箱
 
         }
         else if (otherCollider.node.group === "bomb") { //炸弹
             let bombNode = otherCollider.node.parent;
+            this.dealWithBombEffect(bombNode);
             let bombEffect = bombNode.getChildByName("BombEffect");
-
-            //播放爆炸效果
-            bombEffect.active = true;
-            let bombAnimation = bombEffect.getComponent(cc.Animation);
-            let animateState = bombAnimation.play();
-            //隐藏炸弹
-            otherCollider.node.active = false;
 
             //获取爆炸范围内刚体
             let bombEffectSize = bombEffect.getContentSize();
             let bombEffectWorldPos = bombNode.convertToWorldSpaceAR(bombEffect.position);
-            cc.log("worldPos:", bombEffectWorldPos);
             let bombRect = cc.rect(bombEffectWorldPos.x, bombEffectWorldPos.y, bombEffectSize.width - 0, bombEffectSize.height - 0);
-            cc.log("bombRect:", bombRect);
 
             let colliderList = cc.director.getPhysicsManager().testAABB(bombRect);
             for (let i = 0; i < colliderList.length; i++) {
-                cc.log(colliderList[i].node.name);
-                if (colliderList[i].node.name === 'bomb' && colliderList[i].node.active) {
-                    cc.log("true:", colliderList[i].node);
+                if ((colliderList[i].node.group === 'bomb') && colliderList[i].node.active) {
                     this.dealWithBombEffect(colliderList[i].node.parent);
+                }
+                else if (colliderList[i].node.group === 'enemy') {
+                    this.dealWithEnemyEffect(colliderList[i], false);
                 }
             }
         }
@@ -123,7 +76,58 @@ cc.Class({
             return;
         }
     },
-    //处理爆炸效果
+    //处理敌人碰撞效果
+    dealWithEnemyEffect(otherCollider, isBulletCollider = true) {
+        let enemyBody = null;
+        let headNode = null;
+        if (otherCollider.node.name === "headNode") {
+            enemyBody = otherCollider.node.parent;
+            headNode = otherCollider.node;
+        }
+        else if (otherCollider.node.parent.parent.name === "EnemyBody") {
+            enemyBody = otherCollider.node.parent.parent;
+            headNode = enemyBody.getChildByName("headNode");
+        }
+
+        //非子弹碰撞，处理爆炸效果
+        if (!isBulletCollider) {
+            let headNodeRigid = headNode.getComponent(cc.RigidBody);
+            headNodeRigid.gravityScale = 3;
+            headNodeRigid.linearVelocity = this.onBeginVelocity;
+        }
+
+        let head = headNode.getChildByName("head");
+        if (head.active) {
+            //变换脸部状态
+            head.active = false;
+
+            //修改其他节点本身的重力
+            for (let i = 0; i < enemyBody.children.length; i++) {
+                let item = enemyBody.children[i];
+                if (item.name !== "headNode") {
+                    for (let j = 0; j < item.children.length; j++) {
+                        let itemChild = item.children[j];
+                        let rigidBody = itemChild.getComponent(cc.RigidBody);
+                        if (rigidBody) {
+                            rigidBody.gravityScale = 3;
+                        }
+                    }
+                }
+                else {
+                    //修改headNode刚体上的重力
+                    let headNodeRigid = item.getComponent(cc.RigidBody);
+                    headNodeRigid.gravityScale = 3;
+                }
+            }
+
+            //播放血动画
+            let bloodEffect = enemyBody.getChildByName("BloodEffect");
+            bloodEffect.active = true;
+            let animation = bloodEffect.getComponent(cc.Animation);
+            animation.play();
+        }
+    },
+    //处理爆炸碰撞效果
     dealWithBombEffect(bombNode) {
         let bombEffect = bombNode.getChildByName("BombEffect");
 
@@ -134,7 +138,6 @@ cc.Class({
         //隐藏炸弹
         let bomb = bombNode.getChildByName("bomb");
         bomb.active = false;
-
     },
 
     onEndContact: function (contact, selfCollider, otherCollider) {
