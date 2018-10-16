@@ -29,12 +29,6 @@ cc.Class({
         }
     },
     onBeginContact: function (contact, selfCollider, otherCollider) {
-        this.colliderNum -= 1;
-        if (this.colliderNum <= 0) {
-            this.recoverItemToPool();
-            return;
-        }
-
         let velocity = this.rigidBody.linearVelocity;
         let normalizeVelocity = velocity.normalize().mulSelf(BulletConfig.MulVelocityVal);
         this.onBeginVelocity = normalizeVelocity;
@@ -95,13 +89,54 @@ cc.Class({
 
         }
         else if (otherCollider.node.group === "bomb") { //炸弹
-            //播放爆炸效果（范围性）
-            let bombEffect = otherCollider.node.getChildByName("BombEffect");
+            let bombNode = otherCollider.node.parent;
+            let bombEffect = bombNode.getChildByName("BombEffect");
+
+            //播放爆炸效果
             bombEffect.active = true;
             let bombAnimation = bombEffect.getComponent(cc.Animation);
             let animateState = bombAnimation.play();
+            //隐藏炸弹
+            otherCollider.node.active = false;
+
+            //获取爆炸范围内刚体
+            let bombEffectSize = bombEffect.getContentSize();
+            let bombEffectWorldPos = bombNode.convertToWorldSpaceAR(bombEffect.position);
+            cc.log("worldPos:", bombEffectWorldPos);
+            let bombRect = cc.rect(bombEffectWorldPos.x, bombEffectWorldPos.y, bombEffectSize.width - 0, bombEffectSize.height - 0);
+            cc.log("bombRect:", bombRect);
+
+            let colliderList = cc.director.getPhysicsManager().testAABB(bombRect);
+            for (let i = 0; i < colliderList.length; i++) {
+                cc.log(colliderList[i].node.name);
+                if (colliderList[i].node.name === 'bomb' && colliderList[i].node.active) {
+                    cc.log("true:", colliderList[i].node);
+                    this.dealWithBombEffect(colliderList[i].node.parent);
+                }
+            }
+        }
+
+        //回收子弹
+        this.colliderNum -= 1;
+        if (this.colliderNum <= 0) {
+            this.recoverItemToPool();
+            return;
         }
     },
+    //处理爆炸效果
+    dealWithBombEffect(bombNode) {
+        let bombEffect = bombNode.getChildByName("BombEffect");
+
+        //播放爆炸效果
+        bombEffect.active = true;
+        let bombAnimation = bombEffect.getComponent(cc.Animation);
+        let animateState = bombAnimation.play();
+        //隐藏炸弹
+        let bomb = bombNode.getChildByName("bomb");
+        bomb.active = false;
+
+    },
+
     onEndContact: function (contact, selfCollider, otherCollider) {
         let Velocity = this.rigidBody.linearVelocity;
         let normalizeVelocity = Velocity.normalize().mulSelf(BulletConfig.MulVelocityVal);
