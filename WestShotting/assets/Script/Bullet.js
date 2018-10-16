@@ -46,7 +46,18 @@ cc.Class({
             this.dealWithEnemyEffect(otherCollider);
         }
         else if (otherCollider.node.group === "woodSquare") { //木箱
+            //刚体
+            let rigidBody = otherCollider.getComponent(cc.RigidBody);
+            cc.log("rigidBody velocity:", rigidBody.linearVelocity);
 
+            if (rigidBody.linearVelocity.mag() !== 0) {
+                let woodSquare = otherCollider.node;
+                let woodAnimation = woodSquare.getComponent(cc.Animation);
+                let woodAnimataState = woodAnimation.getAnimationState("WoodBombClip");
+                if (!woodAnimataState.isPlaying) {
+                    woodAnimation.play();
+                }
+            }
         }
         else if (otherCollider.node.group === "bomb") { //炸弹
             let bombNode = otherCollider.node.parent;
