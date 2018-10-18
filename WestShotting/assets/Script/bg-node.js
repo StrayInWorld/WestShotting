@@ -20,6 +20,15 @@ cc.Class({
         frontBgSpeed: 0.6,
         frontBgErrorDistance: 10,
 
+        westStreetUpBgAry: [cc.Node],
+        westStreetUpBgSpeed: 0.6,
+        westStreetUpBgErrorDistance: 10,
+
+        westStreetDownBgAry: [cc.Node],
+        westStreetDownBgSpeed: 0.6,
+        westStreetDownBgErrorDistance: 10,
+
+
     },
 
     // LIFE-CYCLE CALLBACKS:
@@ -72,41 +81,95 @@ cc.Class({
 
         this.mountainBgOriginX1 = this.mountainBgAry[0].x;
         this.mountainBgOriginX2 = this.mountainBgAry[1].x;
+
+        //西部街区
+        let westStreetDownBgAryLength = this.westStreetDownBgAry.length;
+        let westStreetUpBgAryLength = this.westStreetUpBgAry.length;
+        this.flipBg(this.westStreetUpBgAry);
+        this.initMoveBgOriginX(this.westStreetUpBgAry);
+        this.initMoveBgOriginX(this.westStreetDownBgAry);
+        //西部街区底部
+        this.westStreetDownBgFirstOriginX = this.westStreetDownBgAry[0].x;
+        this.westStreetDownBgLastOriginX = this.westStreetDownBgAry[westStreetDownBgAryLength - 1].x;
+        //西部街区上部
+        this.westStreetUpBgFirstOriginX = this.westStreetUpBgAry[0].x;
+        this.westStreetUpBgLastOriginX = this.westStreetUpBgAry[westStreetUpBgAryLength - 1].x;
     },
 
+    update(dt) {
+        //峡谷
+        // this.moveBg(this.backBgAry, this.backBgSpeed, this.backBgOriginX1, this.backBgOriginX2, this.backBgErrorDistance);
+        // this.moveBg(this.frontBgAry, this.frontBgSpeed, this.frontBgOriginX1, this.frontBgOriginX2, this.frontBgErrorDistance);
+        // this.moveBg(this.mountainBgAry, this.mountainBgSpeed, this.mountainBgOriginX1, this.mountainBgOriginX2, this.mountainBgErrorDistance);
+
+        //西部街区
+        // this.moveBg(this.westStreetDownBgAry, this.westStreetDownBgSpeed, this.westStreetDownBgFirstOriginX, this.westStreetDownBgLastOriginX, this.westStreetDownBgErrorDistance);
+        this.moveBg(this.westStreetUpBgAry, this.westStreetUpBgSpeed, this.westStreetUpBgFirstOriginX, this.westStreetUpBgLastOriginX, this.westStreetUpBgErrorDistance);
+
+    },
+
+    /**
+     * @method  翻转第二组的x轴，或y轴
+     * @param {Array} bgList 
+     */
+    flipBg(bgList) {
+        let bgLen = bgList.length;
+        for (let i = bgLen / 2; i < bgLen; i++) {
+            bgList[i].runAction(cc.flipX(true));
+        }
+    },
+    /**
+     * 注意锚点的横位置需要设置在0。背景节点数组的父节点需要使用widget全部拉伸
+     * @method 初始化移动背景原始横坐标
+     * @param {Array} bgList  要移动的背景节点数组
+     */
+    initMoveBgOriginX(bgList) {
+        let bgParent = bgList[0].parent;
+        let firstBgWidget = bgList[0].getComponent(cc.Widget);
+        let bgParentWidget = bgParent.getComponent(cc.Widget);
+
+        //如果使用widget,应该立即更新，获取准确位置
+        if (bgParentWidget) {
+            bgParentWidget.updateAlignment();
+        }
+        if (firstBgWidget) {
+            firstBgWidget.updateAlignment();
+        }
+        for (let i = 1; i < bgList.length; i++) {
+            if (i === 1) {
+                bgList[i].x = bgParent.width;
+            }
+            else {
+                bgList[i].x = bgList[i - 1].x + bgList[i].width;
+            }
+            bgList[i].y = bgList[0].y
+        }
+    },
     /**
      * @method 移动背景函数
      * @param {Array} bgList  要移动的背景节点数组
      * @param {Number} speed  移动的速度，值越大，移动越快
-     * @param {Number} bgOriginX1  第一张背景图初始横坐标
-     * @param {Number} bgOriginX2  第二张背景图初始横坐标
+     * @param {Number} firstBgOriginX  第一张背景图初始横坐标
+     * @param {Number} lastBgOriginX  最后一张背景图初始横坐标
      */
-    moveBg(bgList, speed, bgOriginX1, bgOriginX2, errorDistancae) {
-        let originX1 = bgOriginX1;
-        let originX2 = bgOriginX2;
+    moveBg(bgList, speed, firstBgOriginX, lastBgOriginX, errorDistancae) {
+        let originX1 = firstBgOriginX;
+        let originX2 = lastBgOriginX;
         let resetPos = originX2;
         let bgLimit = originX1 - bgList[0].width;
 
-        for (var index = 0; index < bgList.length; index++) {
-            if (bgList[0].x <= bgLimit) {
-                let errorPos = originX1 - bgList[1].x;
-                bgList[0].x = resetPos - errorPos - errorDistancae;
+        for (var i = 0; i < bgList.length; i++) {
+            if (bgList[i].x <= bgLimit) {
+                let nextIndex = i + 1;
+                if (i === bgList.length - 1) {
+                    nextIndex = 0;
+                }
+                let errorPos = originX1 - bgList[nextIndex].x;          //准备出框的与其紧接气候的误差
+                bgList[i].x = resetPos - errorPos - errorDistancae;
             }
-
-            if (bgList[1].x <= bgLimit) {
-                bgList[1].x = resetPos;
-                let errorPos = originX1 - bgList[0].x;
-                bgList[1].x = resetPos - errorPos - errorDistancae;
-            }
-            bgList[index].x -= speed;
+            bgList[i].x -= speed;
         }
     },
-    update(dt) {
-        this.moveBg(this.backBgAry, this.backBgSpeed, this.backBgOriginX1, this.backBgOriginX2, this.backBgErrorDistance);
-        this.moveBg(this.frontBgAry, this.frontBgSpeed, this.frontBgOriginX1, this.frontBgOriginX2, this.frontBgErrorDistance);
-        this.moveBg(this.mountainBgAry, this.mountainBgSpeed, this.mountainBgOriginX1, this.mountainBgOriginX2, this.mountainBgErrorDistance);
-    },
-
 
     start() {
 

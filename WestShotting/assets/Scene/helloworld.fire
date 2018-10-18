@@ -574,9 +574,7 @@
       "__id__": 11
     },
     "_enabled": true,
-    "_clip": {
-      "__uuid__": "a6d72d84-7e35-4950-8aeb-c0de62c9f68d"
-    },
+    "_clip": null,
     "_volume": 1,
     "_mute": false,
     "_loop": false,
