@@ -34,6 +34,14 @@ cc.Class({
     // LIFE-CYCLE CALLBACKS:
 
     onLoad() {
+        // let b = cc.find("Canvas/basic_point");
+        // let b1 = cc.find("Canvas/basic_point1");
+        // cc.log("1:", b1.getPosition());
+        // b1.runAction(cc.flipX(true));
+        // b1.setPosition(b.getPosition());
+        // cc.log("2:", b1.getPosition());
+
+
         let canvasNode = cc.find("Canvas");
 
         //云动画
@@ -103,13 +111,13 @@ cc.Class({
         // this.moveBg(this.mountainBgAry, this.mountainBgSpeed, this.mountainBgOriginX1, this.mountainBgOriginX2, this.mountainBgErrorDistance);
 
         //西部街区
-        // this.moveBg(this.westStreetDownBgAry, this.westStreetDownBgSpeed, this.westStreetDownBgFirstOriginX, this.westStreetDownBgLastOriginX, this.westStreetDownBgErrorDistance);
-        this.moveBg(this.westStreetUpBgAry, this.westStreetUpBgSpeed, this.westStreetUpBgFirstOriginX, this.westStreetUpBgLastOriginX, this.westStreetUpBgErrorDistance);
+        this.moveBg(this.westStreetDownBgAry, this.westStreetDownBgSpeed, this.westStreetDownBgFirstOriginX, this.westStreetDownBgLastOriginX, this.westStreetDownBgErrorDistance);
+        // this.moveBg(this.westStreetUpBgAry, this.westStreetUpBgSpeed, this.westStreetUpBgFirstOriginX, this.westStreetUpBgLastOriginX, this.westStreetUpBgErrorDistance);
 
     },
 
     /**
-     * @method  翻转第二组的x轴，或y轴
+     * @method  翻转x轴
      * @param {Array} bgList 
      */
     flipBg(bgList) {
@@ -118,8 +126,8 @@ cc.Class({
             bgList[i].runAction(cc.flipX(true));
         }
     },
+
     /**
-     * 注意锚点的横位置需要设置在0。背景节点数组的父节点需要使用widget全部拉伸
      * @method 初始化移动背景原始横坐标
      * @param {Array} bgList  要移动的背景节点数组
      */
@@ -156,10 +164,11 @@ cc.Class({
         let originX1 = firstBgOriginX;
         let originX2 = lastBgOriginX;
         let resetPos = originX2;
-        let bgLimit = originX1 - bgList[0].width;
+        let bgLimit = -bgList[0].width;  //这里需要注意，根据锚点的不同值可能不同。
 
         for (var i = 0; i < bgList.length; i++) {
             if (bgList[i].x <= bgLimit) {
+                cc.log(i);
                 let nextIndex = i + 1;
                 if (i === bgList.length - 1) {
                     nextIndex = 0;
