@@ -94,7 +94,7 @@ cc.Class({
         let westStreetDownBgAryLength = this.westStreetDownBgAry.length;
         let westStreetUpBgAryLength = this.westStreetUpBgAry.length;
         this.flipBg(this.westStreetUpBgAry);
-        this.initMoveBgOriginX(this.westStreetUpBgAry);
+        // this.initMoveBgOriginX(this.westStreetUpBgAry);
         this.initMoveBgOriginX(this.westStreetDownBgAry);
         //西部街区底部
         this.westStreetDownBgFirstOriginX = this.westStreetDownBgAry[0].x;
@@ -150,7 +150,7 @@ cc.Class({
             else {
                 bgList[i].x = bgList[i - 1].x + bgList[i].width;
             }
-            bgList[i].y = bgList[0].y
+            bgList[i].y = bgList[0].y;
         }
     },
     /**

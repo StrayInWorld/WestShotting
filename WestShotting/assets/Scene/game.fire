@@ -41,8 +41,8 @@
     },
     "_scale": {
       "__type__": "cc.Vec3",
-      "x": 0.2713208654895333,
-      "y": 0.2713208654895333,
+      "x": 0.1,
+      "y": 0.1,
       "z": 1
     },
     "_quat": {
@@ -1608,8 +1608,8 @@
         "__id__": 45
       }
     ],
-    "westStreetDownBgSpeed": 5,
-    "westStreetDownBgErrorDistance": 0,
+    "westStreetDownBgSpeed": 1,
+    "westStreetDownBgErrorDistance": 10,
     "_id": "f4INYPRL1BY5jc3s0MrwvK"
   },
   {
@@ -2000,7 +2000,7 @@
       "__id__": 38
     },
     "_enabled": true,
-    "alignMode": 1,
+    "alignMode": 0,
     "_target": {
       "__id__": 2
     },
@@ -2235,7 +2235,7 @@
     },
     "_position": {
       "__type__": "cc.Vec3",
-      "x": 2935,
+      "x": 2864,
       "y": 15,
       "z": 0
     },
@@ -2296,7 +2296,7 @@
       "__id__": 37
     },
     "_enabled": true,
-    "alignMode": 1,
+    "alignMode": 0,
     "_target": {
       "__id__": 2
     },

@@ -12,6 +12,11 @@ cc.Class({
             type: cc.AudioSource,
             default: null
         },
+        musicOffSprite: cc.SpriteFrame,
+        musicOnSprite: cc.SpriteFrame
+    },
+    onLoad() {
+        this.nodeSprite = this.node.getComponent(cc.Sprite);
     },
     musicBtnCB() {
         if (this.audioSource.isPlaying) {
@@ -22,17 +27,12 @@ cc.Class({
         }
     },
     play: function () {
+        this.nodeSprite.spriteFrame = this.musicOnSprite;
         this.audioSource.play();
     },
     pause: function () {
+        this.nodeSprite.spriteFrame = this.musicOffSprite;
         this.audioSource.pause();
     },
 
-    // onLoad () {
-    // },
-
-    // start () {
-    // },
-
-    // update (dt) {},
 });
