@@ -31,6 +31,15 @@ cc.Class({
             cc.audioEngine.pauseAll();
         }
     },
+    signBtnCB() {
+        console.log("signBtnCB");
+    },
+    rankBtnCB() {
+        console.log("rankBtnCB");
+    },
+    chooseLevelBtnCB() {
+        console.log("chooseLevelBtnCB");
+    }
 
     // update (dt) {},
 });
