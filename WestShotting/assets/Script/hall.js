@@ -8,6 +8,7 @@ cc.Class({
     extends: cc.Component,
 
     properties: {
+        sign_node: cc.Node,
     },
 
     // LIFE-CYCLE CALLBACKS:
@@ -21,18 +22,8 @@ cc.Class({
     startBtnCB() {
         cc.director.loadScene("game");
     },
-    onMusicButtonClick() {
-        this.isMusic = !this.isMusic;
-        if (this.isMusic) {
-            this.sprite.spriteFrame = this.sprites[0];
-            cc.audioEngine.resumeAll();
-        } else {
-            this.sprite.spriteFrame = this.sprites[1];
-            cc.audioEngine.pauseAll();
-        }
-    },
     signBtnCB() {
-        console.log("signBtnCB");
+        this.sign_node.active = true;
     },
     rankBtnCB() {
         console.log("rankBtnCB");
