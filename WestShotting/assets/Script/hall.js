@@ -9,13 +9,13 @@ cc.Class({
 
     properties: {
         sign_node: cc.Node,
+        choose_level_node: cc.Node
     },
 
     // LIFE-CYCLE CALLBACKS:
 
     onLoad() {
     },
-
     start() {
 
     },
@@ -25,11 +25,8 @@ cc.Class({
     signBtnCB() {
         this.sign_node.active = true;
     },
-    rankBtnCB() {
-        console.log("rankBtnCB");
-    },
     chooseLevelBtnCB() {
-        console.log("chooseLevelBtnCB");
+        this.choose_level_node = true;
     }
 
     // update (dt) {},

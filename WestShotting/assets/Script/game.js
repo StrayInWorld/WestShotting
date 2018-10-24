@@ -19,6 +19,9 @@ cc.Class({
     start() {
 
     },
+    backBtnCB() {
+        cc.director.loadScene("hall");
+    }
 
     // update (dt) {},
 });
