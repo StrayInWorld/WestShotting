@@ -117,24 +117,43 @@ cc.Class({
     },
     showUserData(rank, nickName, avatarUrl, KVDataList, InContentNode = true) {
         let node = cc.instantiate(this.prefab);
-        //当最后一个参数为false时，添加到最后。为单个显示。
-        if (!InContentNode) {
-            node.parent = this.singleItem;
-            node.setPosition(cc.v2(5, -10));
-            console.log("node position:", node.position);
-        }
-        else {
-            node.parent = this.content;
-        }
-
-        let userName = node.getChildByName('userName').getComponent(cc.Label);
-        let userIcon = node.getChildByName('mask').getChildByName("userIcon").getComponent(cc.Sprite);
-        let score = node.getChildByName("score").getComponent(cc.Label);
+        let userNameNode = node.getChildByName('userName');
+        let userName = userNameNode.getComponent(cc.Label);
+        let userHeadMask = node.getChildByName('mask');
+        let userIcon = userHeadMask.getChildByName("userIcon").getComponent(cc.Sprite);
+        let scoreNode = node.getChildByName("score");
+        let score = scoreNode.getComponent(cc.Label);
         let rankNode = node.getChildByName("rankNode");
         let rankIcon = rankNode.getChildByName("rankingIcon");
         let rankLabel = rankNode.getChildByName("rankingLabel");
         rankIcon.enabled = false;
         rankLabel.enabled = false;
+
+        let rankItemBg = node.getChildByName("bg_node").getChildByName("item_bg");
+
+        //当最后一个参数为false时，添加到最后。为单个显示。
+        if (!InContentNode) {
+            node.parent = this.singleItem;
+            node.setPosition(cc.v2(5, -13));
+            console.log("node position:", node.position);
+
+            //重置单人布局
+            let rankNodePos = rankNode.getPosition();
+            //排名，头像
+            rankNode.setPosition(cc.v2(rankNodePos.x + 125, rankNodePos.y));
+            userHeadMask.setPosition(cc.v2(rankNodePos.x + 225, rankNodePos.y));
+
+            //分数和名字
+            let userNamePos = userNameNode.getPosition();
+            userNameNode.setPosition(cc.v2(userNamePos.x + 50, userNamePos.y + 20));
+            scoreNode.setPosition(cc.v2(userNamePos.x + 50, userNamePos.y - 20));
+
+            rankItemBg.active = false;
+        }
+        else {
+            node.parent = this.content;
+        }
+
 
         // let item_bg = node.getChildByName("item_bg");
         switch (rank) {
