@@ -45,7 +45,7 @@ cc.Class({
     },
     //获取好友数据
     getFriendStorage(keyValue) {
-        // this.removeOriginRecore();
+        this.removeOriginRecore();
         let _self = this;
         wx.getUserInfo({
             openIdList: ['selfOpenId'],
@@ -72,7 +72,7 @@ cc.Class({
                         });
 
                         console.log("data:", data);
-                        // // 下面代码为实际需要运行代码
+                        // 下面代码为实际需要运行代码
                         // for (let i = 0; i < data.length; i++) {
                         //     let friend = data[i];
                         //     if (!_self.preSettingData(i, friend, ' stop getting friends\' infos')) {
