@@ -73,23 +73,23 @@ cc.Class({
 
                         console.log("data:", data);
                         // 下面代码为实际需要运行代码
-                        // for (let i = 0; i < data.length; i++) {
-                        //     let friend = data[i];
-                        //     if (!_self.preSettingData(i, friend, ' stop getting friends\' infos')) {
-                        //         return;
-                        //     }
+                        for (let i = 0; i < data.length; i++) {
+                            let friend = data[i];
+                            if (!_self.preSettingData(i, friend, ' stop getting friends\' infos')) {
+                                return;
+                            }
 
-                        //     //添加个人数据
-                        //     if (friend.avatarUrl == userData.avatarUrl) {
-                        //         console.log("添加个人数据");
-                        //         _self.showUserData(i, friend.nickname, friend.avatarUrl, friend.KVDataList, false);
-                        //     }
-                        // }
+                            //添加个人数据
+                            if (friend.avatarUrl == userData.avatarUrl) {
+                                console.log("添加个人数据");
+                                _self.showUserData(i, friend.nickname, friend.avatarUrl, friend.KVDataList, false);
+                            }
+                        }
 
                         //下面的代码为测试拖动是否合理代码，实际不需要执行。将removeOriginRecore()关闭，即可测试拖动是否合理。
-                        for (let i = 0; i < 10; i++) {
-                            _self.showUserData(i, userData.nickName, userData.avatarUrl, userData.KVDataList);
-                        }
+                        // for (let i = 0; i < 10; i++) {
+                        //     _self.showUserData(i, userData.nickName, userData.avatarUrl, userData.KVDataList);
+                        // }
                     },
                     fail: function (res) {
                         console.log(res);
@@ -128,7 +128,7 @@ cc.Class({
         }
 
         let userName = node.getChildByName('userName').getComponent(cc.Label);
-        let userIcon = node.getChildByName('mask').children[0].getComponent(cc.Sprite);
+        let userIcon = node.getChildByName('mask').getChildByName("userIcon").getComponent(cc.Sprite);
         let score = node.getChildByName("score").getComponent(cc.Label);
         let rankNode = node.getChildByName("rankNode");
         let rankIcon = rankNode.getChildByName("rankingIcon");
@@ -157,9 +157,6 @@ cc.Class({
             rankValue.string = rank + 1;
         }
 
-        console.log("1:", userName);
-        console.log("2:", userName.string);
-        console.log("3:", nickName);
         userName.string = nickName;
 
         if (KVDataList) {
