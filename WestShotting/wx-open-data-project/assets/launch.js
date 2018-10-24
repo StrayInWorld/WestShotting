@@ -240,7 +240,6 @@ cc.Class({
             success: (userRes) => {
                 console.log('getUserInfo success', userRes.data);
                 let userData = userRes.data[0];
-                console.log('getUserInfo userData', userData);
                 //取出所有好友数据
                 wx.getGroupCloudStorage({
                     shareTicket: shareTicket,
@@ -262,35 +261,29 @@ cc.Class({
                             return b.KVDataList[0].value - a.KVDataList[0].value;
                         });
                         for (let i = 0; i < data.length; i++) {
-                            var playerInfo = data[i];
-                            // var item = cc.instantiate(this.prefabRankItem);
-                            // item.getComponent('RankItem').init(i, playerInfo);
-                            // this.scrollViewContent.addChild(item);
-                            // if (data[i].avatarUrl == userData.avatarUrl) {
-                            //     let userItem = cc.instantiate(this.prefabRankItem);
-                            //     userItem.getComponent('RankItem').init(i, playerInfo);
-                            //     userItem.y = -354;
-                            //     this.node.addChild(userItem, 1, 1000);
-                            // }
+                            let playerInfo = data[i];
                             if (!_self.preSettingData(i, playerInfo, ' stop getting friends\' infos')) {
                                 return;
                             }
-                        }
-                        if (data.length <= 8) {
-                            let layout = this.scrollViewContent.getComponent(cc.Layout);
-                            layout.resizeMode = cc.Layout.ResizeMode.NONE;
+
+                            //添加个人数据
+                            if (playerInfo.avatarUrl == userData.avatarUrl) {
+                                console.log("添加个人数据");
+                                _self.showUserData(i, friend.nickname, friend.avatarUrl, friend.KVDataList, false);
+                            }
                         }
                     },
                     fail: res => {
                         console.log("wx.getFriendCloudStorage fail", res);
-                        // this.loadingLabel.getComponent(cc.Label).string = "数据加载失败，请检测网络，谢谢。";
                         console.log("数据加载失败，请检测网络，谢谢");
+                        // this.loadingLabel.getComponent(cc.Label).string = "数据加载失败，请检测网络，谢谢。";
+
                     },
                 });
             },
             fail: (res) => {
-                // this.loadingLabel.getComponent(cc.Label).string = "数据加载失败，请检测网络，谢谢。";
                 console.log("数据加载失败，请检测网络，谢谢");
+                // this.loadingLabel.getComponent(cc.Label).string = "数据加载失败，请检测网络，谢谢。";
             }
         });
     },

@@ -10,6 +10,26 @@ cc.Class({
 
     start() {
         this.node.zIndex = 20;
+
+        if (CC_WECHATGAME) {
+            wx.updateShareMenu({
+                withShareTicket: true,
+                success() {
+                    console.log("updateShareMenu success");
+                },
+                fail() {
+                    console.log("updateShareMenu fail");
+                },
+                complete() {
+                    console.log("updateShareMenu complete");
+                }
+            })
+        }
+        else {
+            cc.log("please run in wechat");
+        }
+
+
     },
     closeRankView() {
         this.node.active = !this.node.active;
@@ -29,11 +49,36 @@ cc.Class({
     onRankGroup() {
         this.node.active = true;
         if (CC_WECHATGAME) {
-            发消息给子域
-            wx.postMessage({
-                messageType: 3,
-                keyValue: "score"
+            //获取不到，使用默认值
+            let shareConfig = {};
+            let defaultShareTitle = "狂野猎杀";
+            let defaultShartImg = canvas.toTempFilePathSync({
+                destWidth: 500,
+                destHeight: 400
             });
+            shareConfig.title = defaultShareTitle;
+            shareConfig.image = defaultShartImg;
+
+            wx.shareAppMessage({
+                title: shareConfig.title,
+                imageUrl: shareConfig.image,
+                success: (res) => {
+                    console.log("share message success");
+                    if (res.shareTickets != undefined && res.shareTickets.length > 0) {
+                        wx.postMessage({
+                            messageType: 3,
+                            keyValue: "score",
+                            shareTicket: res.shareTickets[0]
+                        });
+                    }
+                },
+                fail: function () {
+                    console.log("share message fail");
+                }
+            });
+
+
+
         } else {
             cc.log("please run in group: 获取群排行榜数据。");
         }
