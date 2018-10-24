@@ -12,16 +12,6 @@ cc.Class({
         let _self = this;
         wx.onMessage(data => {
             console.log("onMessage from master");
-            // if (data.nickName && data.avatarUrl) {
-            //     // _self.showUserData(data.nickName, data.avatarUrl);
-            //     // fill the content by the blank targets.
-            //     // (function () {
-            //     //     for (let i = 0; i < 5; i++) {
-            //     //         let node = cc.instantiate(_self.prefab);
-            //     //         node.parent = _self.content;
-            //     //     }
-            //     // })();
-            // };
             if (data.messageType === 1) {                     //获取好友排行
                 _self.getFriendStorage(data.keyValue);
             }
@@ -82,7 +72,7 @@ cc.Class({
                         });
 
                         console.log("data:", data);
-                        //将长度修改为固定值，并将removeOriginRecore()关闭，即可测试拖动是否合理。
+                        // // 下面代码为实际需要运行代码
                         // for (let i = 0; i < data.length; i++) {
                         //     let friend = data[i];
                         //     if (!_self.preSettingData(i, friend, ' stop getting friends\' infos')) {
@@ -94,10 +84,9 @@ cc.Class({
                         //         console.log("添加个人数据");
                         //         _self.showUserData(i, friend.nickname, friend.avatarUrl, friend.KVDataList, false);
                         //     }
-                        //     // _self.showUserData(i,res.data[i].nickname,res.data[i].avatarUrl,res.data[i].KVDataList);
                         // }
 
-                        //下面的代码为测试拖动是否合理代码，实际不需要执行
+                        //下面的代码为测试拖动是否合理代码，实际不需要执行。将removeOriginRecore()关闭，即可测试拖动是否合理。
                         for (let i = 0; i < 10; i++) {
                             _self.showUserData(i, userData.nickName, userData.avatarUrl, userData.KVDataList);
                         }
@@ -147,12 +136,7 @@ cc.Class({
         rankIcon.enabled = false;
         rankLabel.enabled = false;
 
-        let bgNode = node.getChildByName("bg_node");
-        let whiteBg = bgNode.getChildByName("white");
-        whiteBg.active = false;
-        let blue = bgNode.getChildByName("blue");
-        blue.active = false;
-
+        // let item_bg = node.getChildByName("item_bg");
         switch (rank) {
             case 0:
                 rankIcon.active = true;
@@ -171,12 +155,6 @@ cc.Class({
             rankLabel.active = true;
             let rankValue = rankLabel.getComponent(cc.Label);
             rankValue.string = rank + 1;
-        }
-        if (rank % 2 === 0) {
-            whiteBg.active = true;
-        }
-        else {
-            blue.active = true;
         }
 
         console.log("1:", userName);
@@ -300,5 +278,16 @@ cc.Class({
             }
         });
     },
-
+    testScollView() {
+        // if (data.nickName && data.avatarUrl) {
+        //     // _self.showUserData(data.nickName, data.avatarUrl);
+        //     // fill the content by the blank targets.
+        //     // (function () {
+        //     //     for (let i = 0; i < 5; i++) {
+        //     //         let node = cc.instantiate(_self.prefab);
+        //     //         node.parent = _self.content;
+        //     //     }
+        //     // })();
+        // };
+    }
 });

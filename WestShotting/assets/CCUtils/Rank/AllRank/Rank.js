@@ -17,7 +17,7 @@ cc.Class({
     onRank() {
         this.closeRankView();
         if (CC_WECHATGAME) {
-            // 发消息给子域
+            // 发消息给子域  
             wx.postMessage({
                 messageType: 1,
                 keyValue: "score"

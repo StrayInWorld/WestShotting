@@ -18,6 +18,7 @@ cc.Class({
             cc.rotateBy(0.5, 10),
             cc.rotateBy(1, -20),
             cc.rotateBy(1, 10)).easing(cc.easeBackIn(0.5)))
+
         );
     },
 
