@@ -44,52 +44,6 @@ cc.Class({
 
         let canvasNode = cc.find("Canvas");
 
-        //云动画
-        let groundNodeCloud = cc.find("cloudNode", this.node);
-        let cloud2 = cc.find("cloudNode/cloud2", this.node);
-        let cloudOriginNodePos = groundNodeCloud.position;
-        let cloudMoveX = cloud2.position.x;
-        let cloudMoveTime = 120;
-        groundNodeCloud.runAction(cc.repeatForever(
-            cc.sequence(
-                cc.moveBy(cloudMoveTime, cc.v2(-cloudMoveX, 0)),
-                cc.place(cloudOriginNodePos)
-            )
-        ));
-
-        //翻转第二张背景的图
-        let backGround1 = cc.find("backGroundNode/backGround1", this.node);
-        let backGroundWidget = backGround1.getComponent(cc.Widget);
-        backGroundWidget.updateAlignment();
-        let backGround2 = cc.find("backGroundNode/backGround2", this.node);
-        backGround2.setPosition(backGround1.width - canvasNode.width / 2, backGround1.position.y);
-        backGround2.runAction(cc.flipX(true));
-
-        //翻转第二张山的图
-        let mountain1 = cc.find("mountainNode/mountain1", this.node);
-        let mountainGroundWidget = mountain1.getComponent(cc.Widget);
-        mountainGroundWidget.updateAlignment();
-        let mountain2 = cc.find("mountainNode/mountain2", this.node);
-        mountain2.setPosition(mountain1.width - canvasNode.width / 2, mountain1.position.y);
-        mountain2.runAction(cc.flipX(true));
-
-        //翻转第二张前景的图
-        let frontGround1 = cc.find("frontGroundNode/frontGround1", this.node);
-        let frontGroundWidget = frontGround1.getComponent(cc.Widget);
-        frontGroundWidget.updateAlignment();
-        let frontGround2 = cc.find("frontGroundNode/frontGround2", this.node);
-        frontGround2.setPosition(frontGround1.width - canvasNode.width / 2, frontGround1.position.y);
-        frontGround2.runAction(cc.flipX(true));
-
-        this.backBgOriginX1 = this.backBgAry[0].x;
-        this.backBgOriginX2 = this.backBgAry[1].x;
-
-        this.frontBgOriginX1 = this.frontBgAry[0].x;
-        this.frontBgOriginX2 = this.frontBgAry[1].x;
-
-        this.mountainBgOriginX1 = this.mountainBgAry[0].x;
-        this.mountainBgOriginX2 = this.mountainBgAry[1].x;
-
         //西部街区
         let westStreetDownBgAryLength = this.westStreetDownBgAry.length;
         let westStreetUpBgAryLength = this.westStreetUpBgAry.length;
