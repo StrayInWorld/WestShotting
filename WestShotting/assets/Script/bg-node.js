@@ -48,7 +48,7 @@ cc.Class({
         let westStreetDownBgAryLength = this.westStreetDownBgAry.length;
         let westStreetUpBgAryLength = this.westStreetUpBgAry.length;
         this.flipBg(this.westStreetUpBgAry);
-        // this.initMoveBgOriginX(this.westStreetUpBgAry);
+        this.initMoveBgOriginX(this.westStreetUpBgAry);
         this.initMoveBgOriginX(this.westStreetDownBgAry);
         //西部街区底部
         this.westStreetDownBgFirstOriginX = this.westStreetDownBgAry[0].x;
@@ -59,14 +59,9 @@ cc.Class({
     },
 
     update(dt) {
-        //峡谷
-        // this.moveBg(this.backBgAry, this.backBgSpeed, this.backBgOriginX1, this.backBgOriginX2, this.backBgErrorDistance);
-        // this.moveBg(this.frontBgAry, this.frontBgSpeed, this.frontBgOriginX1, this.frontBgOriginX2, this.frontBgErrorDistance);
-        // this.moveBg(this.mountainBgAry, this.mountainBgSpeed, this.mountainBgOriginX1, this.mountainBgOriginX2, this.mountainBgErrorDistance);
-
         //西部街区
         this.moveBg(this.westStreetDownBgAry, this.westStreetDownBgSpeed, this.westStreetDownBgFirstOriginX, this.westStreetDownBgLastOriginX, this.westStreetDownBgErrorDistance);
-        // this.moveBg(this.westStreetUpBgAry, this.westStreetUpBgSpeed, this.westStreetUpBgFirstOriginX, this.westStreetUpBgLastOriginX, this.westStreetUpBgErrorDistance);
+        this.moveBg(this.westStreetUpBgAry, this.westStreetUpBgSpeed, this.westStreetUpBgFirstOriginX, this.westStreetUpBgLastOriginX, this.westStreetUpBgErrorDistance);
 
     },
 
