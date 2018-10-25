@@ -37,6 +37,7 @@ cc.Class({
         this.light.stopAllActions();
         this.light.active = false;
         this.box.stopAllActions();
+        this.box.rotate = 1;
         this.box.getComponent(cc.Button).interactable = false;
 
         //开始倒计时
