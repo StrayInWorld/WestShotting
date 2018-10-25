@@ -15,7 +15,18 @@ cc.Class({
         let bigCircle = cc.find("big_circle", this.node);
         let smallCircle = cc.find("small_circle", this.node);
         bigCircle.runAction(cc.repeatForever(cc.sequence(cc.scaleTo(1, 0.8), cc.callFunc(function () { bigCircle.scale = 0 }, this))));
-        smallCircle.runAction(cc.repeatForever(cc.sequence(cc.delayTime(0.5), cc.scaleTo(1, 0.8), cc.callFunc(function () { smallCircle.scale = 0 }, this))));
+        // smallCircle.runAction(cc.repeatForever(cc.sequence(cc.delayTime(0.5), cc.scaleTo(1, 0.8), cc.callFunc(function () { smallCircle.scale = 0 }, this))));
+
+        let maskNode = cc.find("mask_bg", this.node);
+        maskNode.on("touchstart", function () {
+            this.node.active = false;
+        }, this);
+
+        this.scheduleOnce(function () {
+            if (this.node.active) {
+                this.node.active = false;
+            }
+        }, 3);
     },
 
     start() {
