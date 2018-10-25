@@ -25,6 +25,9 @@ cc.Class({
     signBtnCB() {
         this.sign_node.active = true;
     },
+    signHomeBtnCB() {
+        this.sign_node.active = false;
+    },
     chooseLevelBtnCB() {
         this.choose_level_node.active = true;
     },

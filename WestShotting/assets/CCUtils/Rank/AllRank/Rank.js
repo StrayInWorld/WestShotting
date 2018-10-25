@@ -11,25 +11,23 @@ cc.Class({
     start() {
         this.node.zIndex = 20;
 
-        if (CC_WECHATGAME) {
-            wx.updateShareMenu({
-                withShareTicket: true,
-                success() {
-                    console.log("updateShareMenu success");
-                },
-                fail() {
-                    console.log("updateShareMenu fail");
-                },
-                complete() {
-                    console.log("updateShareMenu complete");
-                }
-            })
-        }
-        else {
-            cc.log("please run in wechat");
-        }
-
-
+        // if (CC_WECHATGAME) {
+        //     wx.updateShareMenu({
+        //         withShareTicket: true,
+        //         success() {
+        //             console.log("updateShareMenu success");
+        //         },
+        //         fail() {
+        //             console.log("updateShareMenu fail");
+        //         },
+        //         complete() {
+        //             console.log("updateShareMenu complete");
+        //         }
+        //     })
+        // }
+        // else {
+        //     cc.log("please run in wechat");
+        // }
     },
     closeRankView() {
         this.node.active = !this.node.active;
