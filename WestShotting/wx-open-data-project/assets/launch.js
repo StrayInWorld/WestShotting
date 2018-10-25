@@ -5,7 +5,9 @@ cc.Class({
         content: cc.Node,
         prefab: cc.Prefab,
         singleItem: cc.Node,
-        loading: cc.Node
+        loading: cc.Node,
+        landPrefab: cc.Prefab,
+        landContent: cc.Node
     },
 
     start() {
@@ -21,6 +23,10 @@ cc.Class({
             else if (data.messageType === 3) {                //获取好友群排行
                 _self.getGroupFriendData(data.keyValue);
                 console.log("onMessage from master get group");
+            }
+            else if (data.messageType === 4) {                //获取好友群排行
+                _self.getLastAndNextFriend(data.keyValue);
+                console.log("getLastAndNextFriend");
             }
         });
 
@@ -193,6 +199,35 @@ cc.Class({
             userIcon.spriteFrame = new cc.SpriteFrame(texture);
         });
     },
+
+    showLandUserData(rank, nickName, avatarUrl, KVDataList, InContentNode = true) {
+        let node = cc.instantiate(this.landPrefab);
+        let userName = node.getChildByName('name').getComponent(cc.Label);
+        let userIcon = node.getChildByName('mask').getChildByName("userIcon").getComponent(cc.Sprite);
+        let score = node.getChildByName("score").getComponent(cc.Label);
+        let rankLabel = node.getChildByName("rank_val").getComponent(cc.Label);
+        node.parent = this.content;
+
+        let rankValue = rankLabel.getComponent(cc.Label);
+        rankValue.string = rank + 1;
+        userName.string = nickName;
+
+        if (KVDataList) {
+            console.log("KVDataList:", KVDataList);
+            console.log("KVDataList[0]:", KVDataList[0]);         //{key: "score", value: "123123"}
+            console.log("KVDataList[0]:", KVDataList[0].value);  //123123
+            score.string = '' + KVDataList[0].value;
+        }
+        console.log(nickName + '\'s info has been getten.');
+        cc.loader.load({
+            url: avatarUrl, type: 'png'
+        }, (err, texture) => {
+            if (err) console.error(err);
+            console.log(texture);
+            userIcon.spriteFrame = new cc.SpriteFrame(texture);
+        });
+    },
+
     //提交数据
     submitScore(keyValue, score) { //提交得分
         console.log("this is submitScore");
@@ -227,6 +262,59 @@ cc.Class({
                 console.log('getUserCloudStorage', 'ok')
             }
         });
+    },
+
+    //横向排行榜（3人）
+    getLastAndNextFriend(keyValue) {
+        this.removeOriginRecore();
+        let _self = this;
+        wx.getUserInfo({
+            openIdList: ['selfOpenId'],
+            success: function (userRes) {
+                let userData = userRes.data[0];
+                wx.getFriendCloudStorage({
+                    keyList: [keyValue],
+                    success: function (res) {
+                        _self.loading.active = false;
+                        let data = res.data;
+                        //分数排序
+                        data.sort((a, b) => {
+                            if (a.KVDataList.length === 0 && b.KVDataList.length == 0) {
+                                return 0;
+                            }
+                            if (a.KVDataList.length === 0) {
+                                return 1;
+                            }
+                            if (b.KVDataList.length === 0) {
+                                return -1;
+                            }
+                            return b.KVDataList[0].value - a.KVDataList[0].value;
+                        });
+                        for (let i = 0; i < data.length; i++) {
+                            let friend = data[i];
+                            if (friend.avatarUrl === userData.avatarUrl) {
+                                console.log(data);
+                                if (i !== 0) {
+                                    _self.showLandUserData(i - 1, data[i - 1].nickname, data[i - 1].avatarUrl, data[i - 1].KVDataList, false);
+                                }
+                                _self.showLandUserData(i, data[i].nickname, data[i].avatarUrl, data[i].KVDataList, false);
+                                if (i !== data.length - 1) {
+                                    _self.showLandUserData(i + 1, data[i + 1].nickname, data[i + 1].avatarUrl, data[i + 1].KVDataList, false);
+                                }
+
+                            }
+                        }
+                    },
+                    fail: function (res) {
+                        console.log(res);
+                    }
+                });
+            },
+            fail: function () {
+                console.log("getUserInfo fail");
+            }
+        })
+
     },
 
     //获取好友群信息
