@@ -41,8 +41,8 @@
     },
     "_scale": {
       "__type__": "cc.Vec3",
-      "x": 0.30527562897211846,
-      "y": 0.30527562897211846,
+      "x": 0.25849070781066313,
+      "y": 0.25849070781066313,
       "z": 1
     },
     "_quat": {
@@ -7312,7 +7312,7 @@
   {
     "__type__": "cc.Node",
     "_name": "level_choose",
-    "_objFlags": 512,
+    "_objFlags": 0,
     "_parent": {
       "__id__": 2
     },
@@ -7567,9 +7567,11 @@
   },
   {
     "__type__": "cc.ClickEvent",
-    "target": null,
+    "target": {
+      "__id__": 2
+    },
     "component": "hall",
-    "handler": "",
+    "handler": "chooseLevelHomeBtnCB",
     "customEventData": ""
   },
   {
@@ -77497,7 +77499,9 @@
     "sign_node": {
       "__id__": 2034
     },
-    "choose_level_node": null,
+    "choose_level_node": {
+      "__id__": 184
+    },
     "_id": "f5gOyh8uZGZalQVRfxgKft"
   }
 ]

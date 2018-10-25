@@ -26,7 +26,10 @@ cc.Class({
         this.sign_node.active = true;
     },
     chooseLevelBtnCB() {
-        this.choose_level_node = true;
+        this.choose_level_node.active = true;
+    },
+    chooseLevelHomeBtnCB() {
+        this.choose_level_node.active = false;
     }
 
     // update (dt) {},
