@@ -44,6 +44,7 @@ cc.Class({
         }
         else if (otherCollider.node.group === "enemy") {      //敌人
             this.dealWithEnemyEffect(otherCollider);
+            this.colliderNum += 1;
         }
         else if (otherCollider.node.group === "woodSquare") { //木箱
             //刚体
@@ -87,7 +88,10 @@ cc.Class({
             return;
         }
     },
-    //处理敌人碰撞效果
+    /**
+     * @method 处理敌人碰撞效果
+     * @param isBulletCollider 是否由子弹碰撞导致的碰撞回调，默认为true
+     *  */
     dealWithEnemyEffect(otherCollider, isBulletCollider = true) {
         let enemyBody = null;
         let headNode = null;
@@ -100,27 +104,40 @@ cc.Class({
             headNode = enemyBody.getChildByName("headNode");
         }
 
-        //非子弹碰撞，处理爆炸效果
+        let headNodeRigid = headNode.getComponent(cc.RigidBody);
+        //非子弹碰撞，例如炸弹爆炸
         if (!isBulletCollider) {
-            let headNodeRigid = headNode.getComponent(cc.RigidBody);
+
             headNodeRigid.gravityScale = 3;
             headNodeRigid.linearVelocity = this.onBeginVelocity;
         }
+
+        //击中时，恢复碰撞效果
+        headNodeRigid.gravityScale = 3;
+        headNodeRigid.linearVelocity = this.onBeginVelocity;
+        let headNodeollider = headNode.getComponent(cc.PhysicsPolygonCollider);
+        // headNodeollider.sensor = false;
+        // headNodeollider.apply();
 
         let head = headNode.getChildByName("head");
         if (head.active) {
             //变换脸部状态
             head.active = false;
 
-            //修改其他节点本身的重力
+            //修改除了headNode节点外本身的重力
             for (let i = 0; i < enemyBody.children.length; i++) {
                 let item = enemyBody.children[i];
                 if (item.name !== "headNode") {
                     for (let j = 0; j < item.children.length; j++) {
                         let itemChild = item.children[j];
                         let rigidBody = itemChild.getComponent(cc.RigidBody);
+                        let collider = itemChild.getComponent(cc.PhysicsPolygonCollider);
                         if (rigidBody) {
                             rigidBody.gravityScale = 3;
+                        }
+                        if (collider) {
+                            // collider.sensor = false;
+                            // collider.apply();
                         }
                     }
                 }

@@ -33,7 +33,7 @@ cc.Class({
         let body = node.addComponent(cc.RigidBody);
         body.type = cc.RigidBodyType.Static;
 
-        this._addBound(node, 0, -this.height / 2, this.width, 20);   //下面
+        this._addBound(node, 0, -this.height / 2 + 220, this.width, 20);   //下面
         this._addBound(node, 0, this.height / 2, this.width, 20);   //上面
         this._addBound(node, -this.width / 2, 0, 20, this.height);  //左边
         this._addBound(node, this.width / 2, 0, 20, this.height);   //右边
