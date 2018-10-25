@@ -44,7 +44,9 @@ cc.Class({
 
         //显示获奖界面
         let getAwardView = cc.find("Canvas/get_award_node");
-        getAwardView.active = true;
+        if (getAwardView) {
+            getAwardView.active = true;
+        }
     }
 
     // update (dt) {},
