@@ -3496,7 +3496,7 @@
         "__id__": 90
       }
     ],
-    "_active": false,
+    "_active": true,
     "_level": 3,
     "_components": [
       {

@@ -35,6 +35,7 @@ cc.Class({
     removeOriginRecore() {
         this.content.removeAllChildren();
         this.singleItem.removeAllChildren();
+        this.landContent.removeAllChildren();
         this.loading.active = true;
     },
     getMyUserInfo() {
@@ -108,7 +109,7 @@ cc.Class({
 
         })
     },
-    preSettingData(rank, user, str) {
+    preSettingData(rank, user, str, isLandScape = false) {
         if (!user) {
             console.log("preSettingData", str);
             return false;
@@ -118,7 +119,13 @@ cc.Class({
             return false;
         }
         console.log("userInfo:", user);
-        this.showUserData(rank, user.nickname, user.avatarUrl, user.KVDataList);
+        if (isLandScape) {
+            console.log("isLandScape");
+            this.showLandUserData(rank, user.nickname, user.avatarUrl, user.KVDataList);
+        }
+        else {
+            this.showUserData(rank, user.nickname, user.avatarUrl, user.KVDataList);
+        }
         return true;
     },
     showUserData(rank, nickName, avatarUrl, KVDataList, InContentNode = true) {
@@ -200,22 +207,24 @@ cc.Class({
         });
     },
 
-    showLandUserData(rank, nickName, avatarUrl, KVDataList, InContentNode = true) {
+    //展示横向数据
+    showLandUserData(rank, nickName, avatarUrl, KVDataList) {
+        console.log("123123123123");
         let node = cc.instantiate(this.landPrefab);
         let userName = node.getChildByName('name').getComponent(cc.Label);
         let userIcon = node.getChildByName('mask').getChildByName("userIcon").getComponent(cc.Sprite);
         let score = node.getChildByName("score").getComponent(cc.Label);
         let rankLabel = node.getChildByName("rank_val").getComponent(cc.Label);
-        node.parent = this.content;
+        node.parent = this.landContent;
 
         let rankValue = rankLabel.getComponent(cc.Label);
         rankValue.string = rank + 1;
         userName.string = nickName;
 
         if (KVDataList) {
-            console.log("KVDataList:", KVDataList);
-            console.log("KVDataList[0]:", KVDataList[0]);         //{key: "score", value: "123123"}
-            console.log("KVDataList[0]:", KVDataList[0].value);  //123123
+            // console.log("KVDataList:", KVDataList);
+            // console.log("KVDataList[0]:", KVDataList[0]);         //{key: "score", value: "123123"}
+            // console.log("KVDataList[0]:", KVDataList[0].value);  //123123
             score.string = '' + KVDataList[0].value;
         }
         console.log(nickName + '\'s info has been getten.');
@@ -293,13 +302,43 @@ cc.Class({
                         for (let i = 0; i < data.length; i++) {
                             let friend = data[i];
                             if (friend.avatarUrl === userData.avatarUrl) {
-                                console.log(data);
-                                if (i !== 0) {
-                                    _self.showLandUserData(i - 1, data[i - 1].nickname, data[i - 1].avatarUrl, data[i - 1].KVDataList, false);
+                                // if (i !== 0) {
+                                //     _self.showLandUserData(i - 1, data[i - 1].nickname, data[i - 1].avatarUrl, data[i - 1].KVDataList);
+                                // }
+                                // _self.showLandUserData(i, data[i].nickname, data[i].avatarUrl, data[i].KVDataList);
+                                // if (i !== data.length - 1) {
+                                //     _self.showLandUserData(i + 1, data[i + 1].nickname, data[i + 1].avatarUrl, data[i + 1].KVDataList);
+                                // }
+
+
+                                let randIndex1 = 0;
+                                let randIndex2 = 0;
+                                let randIndex3 = 0;
+
+                                if (i === 0) {
+                                    randIndex1 = i;
+                                    randIndex2 = i + 1;
+                                    randIndex3 = i + 2;
                                 }
-                                _self.showLandUserData(i, data[i].nickname, data[i].avatarUrl, data[i].KVDataList, false);
-                                if (i !== data.length - 1) {
-                                    _self.showLandUserData(i + 1, data[i + 1].nickname, data[i + 1].avatarUrl, data[i + 1].KVDataList, false);
+                                else if (i !== data.length - 1) {
+                                    randIndex1 = i - 2;
+                                    randIndex2 = i - 1;
+                                    randIndex3 = i;
+                                }
+                                else {
+                                    randIndex1 = i - 1;
+                                    randIndex2 = i;
+                                    randIndex3 = i + 1;
+
+                                }
+                                if (!_self.preSettingData(randIndex1, data[randIndex1], ' stop getting friends\' infos', true)) {
+                                    return;
+                                }
+                                if (!_self.preSettingData(randIndex2, data[randIndex2], ' stop getting friends\' infos', true)) {
+                                    return;
+                                }
+                                if (!_self.preSettingData(randIndex3, data[randIndex3], ' stop getting friends\' infos', true)) {
+                                    return;
                                 }
 
                             }

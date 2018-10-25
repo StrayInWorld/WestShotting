@@ -117,7 +117,7 @@ cc.Class({
 
         for (var i = 0; i < bgList.length; i++) {
             if (bgList[i].x <= bgLimit) {
-                cc.log(i);
+                // cc.log(i);
                 let nextIndex = i + 1;
                 if (i === bgList.length - 1) {
                     nextIndex = 0;

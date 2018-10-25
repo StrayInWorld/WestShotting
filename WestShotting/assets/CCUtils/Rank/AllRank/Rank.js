@@ -128,7 +128,7 @@ cc.Class({
             wx.postMessage({
                 messageType: 2,
                 keyValue: "score",
-                score: 123123
+                score: 123
             });
         } else {
             cc.log("提交数据");
